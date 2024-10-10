@@ -7,7 +7,7 @@ def _get_connection() -> Connection:
         user='root',
         password='Kalin_4870',
         host='localhost',
-        port=8000,
+        port=3306,
         database='forumdb'
     )
 
