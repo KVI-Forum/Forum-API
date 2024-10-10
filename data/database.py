@@ -1,7 +1,7 @@
 from mariadb import connect
 from mariadb.connections import Connection
 
-
+#Change password to make requests
 def _get_connection() -> Connection:
     return connect(
         user='root',

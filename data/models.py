@@ -51,6 +51,14 @@ class Topic(BaseModel):
     name: str
     created_at: datetime
 
+    @classmethod
+    def from_query_result(cls,id,name,created_at):
+        return cls(
+            id=id,
+            name=name, 
+            created_at=created_at
+        )
+
 
 
 
