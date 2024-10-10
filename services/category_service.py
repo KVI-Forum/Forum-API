@@ -14,9 +14,12 @@ def get_all(search: str = None):
 
 
 def get_by_id(id: int):
-    data = read_query('select id, name from categories where id = ?', (id,))
+    data = read_query(
+        '''SELECT id, name, description
+            FROM categories 
+            WHERE id = ?''', (id,))
 
-    return next((Category(id=id, name=name) for id, name in data), None)
+    return next((Category.from_query_result(*row) for row in data), None)
 
 
 def exists(id: int):
