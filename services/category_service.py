@@ -2,10 +2,15 @@ from data.database import insert_query, read_query
 from data.models import Category
 
 
-def get_all():
-    data = read_query('select id, name from categories order by id')
-
-    return (Category(id=id, name=name) for id, name in data)
+def get_all(search: str = None):
+    if search:
+        data = read_query(
+            'select id, name, description from categories where name like ? ',
+            (f'%{search}%',))
+    else:
+        data = read_query('select id, name , description from categories ')
+    
+    return (Category.from_query_result(id, name, description) for id, name, description in data)
 
 
 def get_by_id(id: int):
@@ -29,3 +34,13 @@ def create(category: Category):
     category.id = generated_id
 
     return category
+
+def sort_categories(categories: list[Category], *, attribute='name', reverse=False):
+    if attribute == 'name':
+        def sort_fn(c: Category): return c.name
+    elif attribute == 'description':
+        def sort_fn(c: Category): return c.description
+    else:
+        def sort_fn(c: Category): return c.id
+    
+    return sorted(categories, key=sort_fn, reverse=reverse)

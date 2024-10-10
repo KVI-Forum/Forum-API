@@ -32,6 +32,14 @@ class Category(BaseModel):
     name: str
     description: Optional[str] = None
 
+    @classmethod
+    def from_query_result(cls,id,name,description):
+        return cls(
+            id=id,
+            name=name,
+            description=description
+        )
+
 
 
 
