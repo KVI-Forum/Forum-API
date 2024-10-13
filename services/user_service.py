@@ -1,18 +1,18 @@
 from data.database import insert_query, read_query
-from data.models import User, UserRegistration
+from data.models import User
 
 
 def all_users():
-    data = read_query('SELECT id, firstname, lastname, username, email, is_admin FROM users ORDER BY id')
-    return (User(id=id, first_name=firstname, last_name=lastname, username=username, email=email, is_admin=is_admin)
-            for id, firstname, lastname, username, email, is_admin in data)
+    data = read_query('SELECT id, first_name, last_name, username, email, is_admin FROM users ORDER BY id')
+    return (User(id=id, first_name=first_name, last_name=last_name, username=username, email=email, is_admin=is_admin)
+            for id, first_name, last_name, username, email, is_admin in data)
 
 
 def get_user_by_id(user_id: int):
-    data = read_query('SELECT id, firstname, lastname, username, email, is_admin FROM users WHERE id = ?',
+    data = read_query('SELECT id, first_name, last_name, username, email, is_admin FROM users WHERE id = ?',
                       (user_id,))
-    return next((User(id=id, first_name=firstname, last_name=lastname, username=username, email=email, is_admin=is_admin)
-                 for id, firstname, lastname, username, email, is_admin in data), None)
+    return next((User(id=id, first_name=first_name, last_name=last_name, username=username, email=email, is_admin=is_admin)
+                 for id, first_name, last_name, username, email, is_admin in data), None)
 
 def user_exists(user_id: int):
     return any(read_query('SELECT id FROM users WHERE id = ?', (user_id,)))
@@ -20,7 +20,7 @@ def user_exists(user_id: int):
 
 def create_user(user: User):
     generated_id = insert_query(
-        'INSERT INTO users (firstname, lastname, username, password, email) VALUES (?, ?, ?, ?, ?)',
+        'INSERT INTO users (first_name, last_name, username, password, email) VALUES (?, ?, ?, ?, ?)',
         (user.first_name, user.last_name, user.username, user.password, user.email)
     )
     user.id = generated_id
@@ -32,8 +32,9 @@ def create_token(user: User):
 
 
 def try_login(username: str, password: str):
-    data = read_query('SELECT id, firstname, lastname, username, email, is_admin FROM users WHERE username = ? AND password = ?',
+    data = read_query('SELECT id, first_name, last_name, username, email, password, is_admin FROM users WHERE username = ? AND password = ?',
                       (username, password))
     
-    return next((User(id=id, first_name=firstname, last_name=lastname, username=username, email=email, is_admin=is_admin)
-                 for id, firstname, lastname, username, email, is_admin in data), None)
+    return next((User(id=id, first_name=firstname, last_name=lastname, username=username, email=email, password=password, is_admin=is_admin)
+                 for id, firstname, lastname, username, email, password, is_admin in data), None)
+
