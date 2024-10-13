@@ -1,5 +1,5 @@
 
-from pydantic import BaseModel
+from pydantic import BaseModel, constr
 from datetime import datetime
 from typing import Optional
 
@@ -9,7 +9,7 @@ class User(BaseModel):
     first_name: str
     last_name: str
     username: str
-    is_admin: Optional[bool] = None
+    is_admin: Optional[bool] = False
     email: str
     password: str
 
@@ -98,3 +98,11 @@ class Vote(BaseModel):
     type_vote: Optional[int] = None
     created_at: Optional[datetime] = None
 
+
+TUsername = constr(pattern=r'^[a-zA-Z0-9_]{3,}$')
+TPassword = constr(min_length=8, max_length=32)
+
+
+class LoginData(BaseModel):
+    username: TUsername #type: ignore
+    password: TPassword #type: ignore
