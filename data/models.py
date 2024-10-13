@@ -24,6 +24,13 @@ class User(BaseModel):
             email=email,
             password=password
         )
+    
+class UserRegistration(BaseModel):
+    first_name: str
+    last_name: str
+    username: str
+    email: str
+    password: str
 
 
 

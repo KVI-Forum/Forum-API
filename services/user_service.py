@@ -1,5 +1,5 @@
 from data.database import insert_query, read_query
-from data.models import User
+from data.models import User, UserRegistration
 
 
 def all_users():
@@ -21,7 +21,7 @@ def user_exists(user_id: int):
 def create_user(user: User):
     generated_id = insert_query(
         'INSERT INTO users (firstname, lastname, username, password, email) VALUES (?, ?, ?, ?, ?)',
-        (user.firstname, user.lastname, user.username, user.password, user.email)
+        (user.first_name, user.last_name, user.username, user.password, user.email)
     )
     user.id = generated_id
     return user

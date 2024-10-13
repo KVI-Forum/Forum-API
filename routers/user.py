@@ -1,7 +1,7 @@
 from fastapi import APIRouter,Response
 from data.models import LoginData
 from services import user_service
-from data.models import User
+from data.models import User , UserRegistration
 
 users_router = APIRouter(prefix='/users')
 
@@ -19,8 +19,8 @@ def login(data: LoginData):
 
 
 @users_router.post('/register')
-def register(data: User):
-    
+def register(data: UserRegistration):
+
     user = User(
         first_name=data.first_name,
         last_name=data.last_name,
