@@ -1,7 +1,6 @@
 from data.models import Topic
 from data.database import insert_query, read_query
-
-
+from services import category_service
 
 
 def get_all(search: str = None):
@@ -40,7 +39,7 @@ def get_by_id(id: int):
 
 #     return category
 
-def sort_categories(topics: list[Topic], *, attribute='name', reverse=False):
+def sort_topics(topics: list[Topic], *, attribute='name', reverse=False):
     if attribute == 'name':
         def sort_fn(t: Topic): return t.name
     elif attribute == 'created_at':
@@ -49,3 +48,10 @@ def sort_categories(topics: list[Topic], *, attribute='name', reverse=False):
         def sort_fn(t: Topic): return t.id
     
     return sorted(topics, key=sort_fn, reverse=reverse)
+
+def create(topic_name:str,category_name:str):
+    category_id = category_service.get_by_name(category_name).id
+    generated_id = insert_query("""insert into topics(title,category_id)
+     VALUES(?,?)""",(topic_name,category_id))
+
+

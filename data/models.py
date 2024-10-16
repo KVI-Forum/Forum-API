@@ -2,7 +2,7 @@
 from pydantic import BaseModel, constr
 from datetime import datetime
 from typing import Optional
-
+# TODO: add field validation
 
 class User(BaseModel):
     id: Optional[int] = None

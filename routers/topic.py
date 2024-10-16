@@ -1,4 +1,6 @@
-from fastapi import APIRouter,Response
+from fastapi import APIRouter, Response, Header
+
+from common.auth import get_user_or_raise_401
 from data.models import Topic
 from services import topic_service
 
@@ -11,7 +13,7 @@ def get_topics(sort: str | None = None, sort_by: str | None = None, search: str 
         return Response(status_code=404, content="No topics found.")
     else:
         if sort and (sort == 'asc' or sort == 'desc'):
-            return topic_service.sort(result, reverse=sort == 'desc', attribute=sort_by)
+            return topic_service.sort_topics(result, reverse=sort == 'desc', attribute=sort_by)
         else:
             return result
 
@@ -23,4 +25,12 @@ def get_topic_by_id(id: int):
         return Response(status_code=404, content="Topic not found.")
     else:
         return topic
+
+
+@topic_router.post("/")
+def create_topic(topic_name,category_name,token:str= Header()):
+    user = get_user_or_raise_401(token)
+    topic_service.create(topic_name,category_name)
+
+
 

@@ -21,6 +21,13 @@ def get_by_id(id: int):
 
     return next((Category.from_query_result(*row) for row in data), None)
 
+def get_by_name(name: str):
+    data = read_query(
+        '''SELECT id, name, description
+            FROM categories 
+            WHERE name = ?''', (name,))
+
+    return next((Category.from_query_result(*row) for row in data), None)
 
 def exists(id: int):
     return any(

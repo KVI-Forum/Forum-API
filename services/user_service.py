@@ -1,6 +1,7 @@
 from data.database import insert_query, read_query
 from data.models import User
 
+_SEPARATOR = ';'
 
 def all_users():
     data = read_query('SELECT id, first_name, last_name, username, email, is_admin FROM users ORDER BY id')
@@ -38,3 +39,20 @@ def try_login(username: str, password: str):
     return next((User(id=id, first_name=firstname, last_name=lastname, username=username, email=email, password=password, is_admin=is_admin)
                  for id, firstname, lastname, username, email, password, is_admin in data), None)
 
+def is_authenticated(token: str) -> bool:
+    return any(read_query(
+        'SELECT 1 FROM users where id = ? and username = ?',
+        token.split(_SEPARATOR)))
+
+def find_by_username(username: str):
+    data = read_query('SELECT id, first_name, last_name, username, email, is_admin FROM users WHERE username = ?',
+                      (username,))
+    return next((User(id=id, first_name=first_name, last_name=last_name, username=username, email=email, is_admin=is_admin)
+                 for id, first_name, last_name, username, email, is_admin in data), None)
+
+
+
+def from_token(token: str) -> User | None:
+    _, username = token.split(_SEPARATOR)
+
+    return find_by_username(username)
