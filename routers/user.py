@@ -27,7 +27,7 @@ def register(data: UserRegistration):
         username=data.username,
         password=data.password,
         email=data.email
-    )  # Notice is_admin is not passed here
+    ) 
     user = user_service.create_user(user)
     
     if user:

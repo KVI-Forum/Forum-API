@@ -14,7 +14,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema forumdb
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `forumdb` ;
+CREATE SCHEMA IF NOT EXISTS `forumdb` DEFAULT CHARACTER SET latin1 ;
 USE `forumdb` ;
 
 -- -----------------------------------------------------
@@ -27,7 +27,8 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`categories` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 6;
+AUTO_INCREMENT = 4
+DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
@@ -39,13 +40,14 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`users` (
   `last_name` VARCHAR(45) NOT NULL,
   `username` VARCHAR(45) NOT NULL,
   `is_admin` TINYINT(4) NULL DEFAULT NULL,
-  `password` VARCHAR(1000) NOT NULL,
+  `password` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE,
   UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 5;
+AUTO_INCREMENT = 5
+DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
@@ -68,7 +70,8 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`access` (
     REFERENCES `forumdb`.`users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
@@ -92,13 +95,14 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`conversation` (
     REFERENCES `forumdb`.`users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `forumdb`.`massages`
+-- Table `forumdb`.`messages`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `forumdb`.`massages` (
+CREATE TABLE IF NOT EXISTS `forumdb`.`messages` (
   `id` INT(11) NOT NULL,
   `text` VARCHAR(45) NULL DEFAULT NULL,
   `conversation_id` INT(11) NOT NULL,
@@ -117,7 +121,8 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`massages` (
     REFERENCES `forumdb`.`users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
@@ -127,9 +132,17 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`topics` (
   `id` INT(11) NOT NULL,
   `name` VARCHAR(45) NULL DEFAULT NULL,
   `created_at` DATETIME NOT NULL,
+  `categories_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `idtopics_UNIQUE` (`id` ASC) VISIBLE)
-ENGINE = InnoDB;
+  UNIQUE INDEX `idtopics_UNIQUE` (`id` ASC) VISIBLE,
+  INDEX `fk_topics_categories1_idx` (`categories_id` ASC) VISIBLE,
+  CONSTRAINT `fk_topics_categories1`
+    FOREIGN KEY (`categories_id`)
+    REFERENCES `forumdb`.`categories` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
@@ -154,7 +167,8 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`reply` (
     REFERENCES `forumdb`.`users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
@@ -178,7 +192,8 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`votes` (
     REFERENCES `forumdb`.`users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
