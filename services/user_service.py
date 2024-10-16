@@ -45,10 +45,10 @@ def is_authenticated(token: str) -> bool:
         token.split(_SEPARATOR)))
 
 def find_by_username(username: str):
-    data = read_query('SELECT id, first_name, last_name, username, email, is_admin FROM users WHERE username = ?',
+    data = read_query('SELECT id, first_name, last_name, username, email, password, is_admin FROM users WHERE username = ?',
                       (username,))
-    return next((User(id=id, first_name=first_name, last_name=last_name, username=username, email=email, is_admin=is_admin)
-                 for id, first_name, last_name, username, email, is_admin in data), None)
+    return next((User(id=id, first_name=first_name, last_name=last_name, username=username, email=email, password=password, is_admin=is_admin)
+                 for id, first_name, last_name, username, email, password, is_admin in data), None)
 
 
 

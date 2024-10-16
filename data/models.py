@@ -109,7 +109,7 @@ class Vote(BaseModel):
 
 
 TUsername = constr(pattern=r'^[a-zA-Z0-9_]{3,}$')
-TPassword = constr(min_length=8, max_length=32)
+TPassword = constr(min_length=5, max_length=32)
 
 
 class LoginData(BaseModel):

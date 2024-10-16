@@ -1,3 +1,4 @@
+from fastapi import Response
 from data.models import Topic
 from data.database import insert_query, read_query
 from services import category_service
@@ -50,8 +51,15 @@ def sort_topics(topics: list[Topic], *, attribute='name', reverse=False):
     return sorted(topics, key=sort_fn, reverse=reverse)
 
 def create(topic_name:str,category_name:str):
-    category_id = category_service.get_by_name(category_name).id
-    generated_id = insert_query("""insert into topics(title,category_id)
-     VALUES(?,?)""",(topic_name,category_id))
+    category = category_service.get_by_name(category_name)
+    if category:
+        category_id = category.id
+        generated_id = insert_query("""insert into topics(name,categories_id)
+        VALUES(?,?)""",(topic_name,category_id))
+        return generated_id
+    else:
+        return Response(status_code=404, content="Category not found.")
+    
+    
 
 

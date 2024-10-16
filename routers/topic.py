@@ -30,7 +30,10 @@ def get_topic_by_id(id: int):
 @topic_router.post("/")
 def create_topic(topic_name,category_name,token:str= Header()):
     user = get_user_or_raise_401(token)
-    topic_service.create(topic_name,category_name)
+    topic = topic_service.create(topic_name,category_name)
+    if topic:
+        return Response(status_code=200, content="Topic successfully created")
+
 
 
 

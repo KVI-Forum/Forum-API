@@ -4,7 +4,7 @@ SET FOREIGN_KEY_CHECKS=0;
 -- Truncate child tables first
 TRUNCATE TABLE `votes`;
 TRUNCATE TABLE `reply`;
-TRUNCATE TABLE `massages`;
+TRUNCATE TABLE `messages`;
 TRUNCATE TABLE `conversation`;
 TRUNCATE TABLE `access`;
 

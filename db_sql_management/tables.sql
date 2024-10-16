@@ -5,17 +5,10 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
--- -----------------------------------------------------
 -- Schema forumdb
 -- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Schema forumdb
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `forumdb` DEFAULT CHARACTER SET latin1 ;
-USE `forumdb` ;
+CREATE SCHEMA IF NOT EXISTS `forumdb` DEFAULT CHARACTER SET latin1;
+USE `forumdb`;
 
 -- -----------------------------------------------------
 -- Table `forumdb`.`categories`
@@ -29,7 +22,6 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`categories` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 4
 DEFAULT CHARACTER SET = latin1;
-
 
 -- -----------------------------------------------------
 -- Table `forumdb`.`users`
@@ -48,7 +40,6 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`users` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 5
 DEFAULT CHARACTER SET = latin1;
-
 
 -- -----------------------------------------------------
 -- Table `forumdb`.`access`
@@ -73,15 +64,14 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`access` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
-
 -- -----------------------------------------------------
 -- Table `forumdb`.`conversation`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `forumdb`.`conversation` (
-  `id` INT(11) NOT NULL,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `users_id1` INT(11) NOT NULL,
   `users_id2` INT(11) NOT NULL,
-  `created_at` DATETIME NULL DEFAULT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `fk_conversation_users1_idx` (`users_id1` ASC) VISIBLE,
   INDEX `fk_conversation_users2_idx` (`users_id2` ASC) VISIBLE,
@@ -98,16 +88,15 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`conversation` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
-
 -- -----------------------------------------------------
 -- Table `forumdb`.`messages`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `forumdb`.`messages` (
-  `id` INT(11) NOT NULL,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `text` VARCHAR(45) NULL DEFAULT NULL,
   `conversation_id` INT(11) NOT NULL,
   `users_id` INT(11) NOT NULL,
-  `sended_at` DATETIME NULL DEFAULT NULL,
+  `sent_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `fk_massages_conversation1_idx` (`conversation_id` ASC) VISIBLE,
   INDEX `fk_massages_users1_idx` (`users_id` ASC) VISIBLE,
@@ -124,14 +113,13 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`messages` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
-
 -- -----------------------------------------------------
 -- Table `forumdb`.`topics`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `forumdb`.`topics` (
-  `id` INT(11) NOT NULL,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NULL DEFAULT NULL,
-  `created_at` DATETIME NOT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `categories_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `idtopics_UNIQUE` (`id` ASC) VISIBLE,
@@ -144,16 +132,15 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`topics` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
-
 -- -----------------------------------------------------
 -- Table `forumdb`.`reply`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `forumdb`.`reply` (
-  `id` INT(11) NOT NULL,
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `content` VARCHAR(300) NULL DEFAULT NULL,
   `topics_id` INT(11) NOT NULL,
   `users_id` INT(11) NOT NULL,
-  `created_at` DATETIME NULL DEFAULT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `fk_reply_topics1_idx` (`topics_id` ASC) VISIBLE,
   INDEX `fk_reply_users1_idx` (`users_id` ASC) VISIBLE,
@@ -170,7 +157,6 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`reply` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
-
 -- -----------------------------------------------------
 -- Table `forumdb`.`votes`
 -- -----------------------------------------------------
@@ -178,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`votes` (
   `users_id` INT(11) NOT NULL,
   `reply_id` INT(11) NOT NULL,
   `type_vote` TINYINT(4) NULL DEFAULT NULL,
-  `created_at` DATETIME NULL DEFAULT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`users_id`, `reply_id`),
   INDEX `fk_votes_users1_idx` (`users_id` ASC) VISIBLE,
   INDEX `fk_votes_reply1_idx` (`reply_id` ASC) VISIBLE,
@@ -194,7 +180,6 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`votes` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
-
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

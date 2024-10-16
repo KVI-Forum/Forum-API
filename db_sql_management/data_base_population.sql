@@ -1,61 +1,43 @@
--- Insert data into categories table
-INSERT INTO `forumdb`.`categories` (`name`, `description`)
-VALUES
-('General Discussion', 'A place for general forum topics.'),
-('Tech Support', 'Help and support for technical issues.'),
-('Off-Topic', 'Casual conversations and off-topic discussions.');
+-- Insert data into the `categories` table
+INSERT INTO `forumdb`.`categories` (`name`, `description`) VALUES
+('General Discussion', 'A place for general discussions'),
+('Announcements', 'Important announcements and updates'),
+('Feedback', 'Share your feedback and suggestions');
 
--- Insert data into users table
-INSERT INTO `forumdb`.`users` (`first_name`, `last_name`, `username`, `is_admin`, `password`, `email`)
-VALUES
-('John', 'Doe', 'johndoe', 1, 'password123', 'john@example.com'),
-('Jane', 'Smith', 'janesmith', 0, 'password456', 'jane@example.com'),
-('Alice', 'Johnson', 'alicej', 0, 'password789', 'alice@example.com'),
-('Bob', 'Brown', 'bobbrown', 0, 'password321', 'bob@example.com');
+-- Insert data into the `users` table
+INSERT INTO `forumdb`.`users` (`first_name`, `last_name`, `username`, `is_admin`, `password`, `email`) VALUES
+('John', 'Doe', 'johndoe', 1, 'password123', 'johndoe@example.com'),
+('Jane', 'Smith', 'janesmith', 0, 'password123', 'janesmith@example.com'),
+('Bob', 'Johnson', 'bobjohnson', 0, 'password123', 'bobjohnson@example.com');
 
--- Now you can insert into child tables referencing users and categories
+-- Insert data into the `access` table
+INSERT INTO `forumdb`.`access` (`users_id`, `categories_id`, `read_only`) VALUES
+(1, 1, 0),  -- Admin has full access to General Discussion
+(2, 1, 1),  -- Jane has read-only access to General Discussion
+(3, 3, 0);  -- Bob has full access to Feedback
 
--- Insert data into access table
-INSERT INTO `forumdb`.`access` (`users_id`, `categories_id`, `read_only`)
-VALUES
-(1, 1, 0),
-(2, 1, 1),
-(3, 2, 0),
-(4, 3, 1);
+-- Insert data into the `conversation` table
+INSERT INTO `forumdb`.`conversation` (`users_id1`, `users_id2`, `created_at`) VALUES
+(1, 2, NOW()),  -- Conversation between John and Jane
+(1, 3, NOW());  -- Conversation between John and Bob
 
--- Insert data into topics table
-INSERT INTO `forumdb`.`topics` (`id`, `name`, `created_at`, `categories_id`)
-VALUES
-(1, 'Welcome to the Forum', '2024-09-30 09:00:00', 1),
-(2, 'Technical Issues', '2024-10-01 10:00:00', 2),
-(3, 'Off-Topic Chat', '2024-10-02 11:30:00', 3);
+-- Insert data into the `messages` table
+INSERT INTO `forumdb`.`messages` (`text`, `conversation_id`, `users_id`, `sent_at`) VALUES
+('Hey Jane, how are you?', 1, 1, NOW()),
+('I\'m doing well, thanks!', 1, 2, NOW()),
+('Hey Bob, any feedback on the new update?', 2, 1, NOW());
 
--- Insert data into conversation table
-INSERT INTO `forumdb`.`conversation` (`id`, `users_id1`, `users_id2`, `created_at`)
-VALUES
-(1, 1, 2, '2024-10-01 12:30:00'),
-(2, 2, 3, '2024-10-02 15:45:00');
+-- Insert data into the `topics` table
+INSERT INTO `forumdb`.`topics` (`name`, `created_at`, `categories_id`) VALUES
+('Welcome to the Forum', NOW(), 1),
+('New Forum Update', NOW(), 2);
 
--- Insert data into messages table
-INSERT INTO `forumdb`.`messages` (`id`, `text`, `conversation_id`, `users_id`, `sended_at`)
-VALUES
-(1, 'Hello, how are you?', 1, 1, '2024-10-01 12:31:00'),
-(2, 'I am fine, thank you!', 1, 2, '2024-10-01 12:32:00'),
-(3, 'Do you need help?', 2, 2, '2024-10-02 15:50:00'),
-(4, 'Yes, I do.', 2, 3, '2024-10-02 15:51:00');
+-- Insert data into the `reply` table
+INSERT INTO `forumdb`.`reply` (`content`, `topics_id`, `users_id`, `created_at`) VALUES
+('This looks great, thanks for the update!', 2, 2, NOW()),
+('I love the new features!', 2, 3, NOW());
 
--- Insert data into reply table
-INSERT INTO `forumdb`.`reply` (`id`, `content`, `topics_id`, `users_id`, `created_at`)
-VALUES
-(1, 'Thanks for creating this forum!', 1, 1, '2024-09-30 09:30:00'),
-(2, 'I have a problem with my computer.', 2, 2, '2024-10-01 10:15:00'),
-(3, 'What do you need help with?', 2, 3, '2024-10-01 10:20:00'),
-(4, 'Any good movie recommendations?', 3, 4, '2024-10-02 12:00:00');
-
--- Insert data into votes table
-INSERT INTO `forumdb`.`votes` (`users_id`, `reply_id`, `type_vote`, `created_at`)
-VALUES
-(1, 1, 1, '2024-09-30 09:35:00'),
-(2, 2, -1, '2024-10-01 10:30:00'),
-(3, 3, 1, '2024-10-01 10:25:00'),
-(4, 4, 1, '2024-10-02 12:05:00');
+-- Insert data into the `votes` table
+INSERT INTO `forumdb`.`votes` (`users_id`, `reply_id`, `type_vote`, `created_at`) VALUES
+(1, 1, 1, NOW()),  -- John upvotes Jane's reply
+(2, 2, 1, NOW());  -- Jane upvotes Bob's reply
