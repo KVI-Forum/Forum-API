@@ -24,11 +24,11 @@ VALUES
 (4, 3, 1);
 
 -- Insert data into topics table
-INSERT INTO `forumdb`.`topics` (`id`, `name`, `created_at`)
+INSERT INTO `forumdb`.`topics` (`id`, `name`, `created_at`, `categories_id`)
 VALUES
-(1, 'Welcome to the Forum', '2024-09-30 09:00:00'),
-(2, 'Technical Issues', '2024-10-01 10:00:00'),
-(3, 'Off-Topic Chat', '2024-10-02 11:30:00');
+(1, 'Welcome to the Forum', '2024-09-30 09:00:00', 1),
+(2, 'Technical Issues', '2024-10-01 10:00:00', 2),
+(3, 'Off-Topic Chat', '2024-10-02 11:30:00', 3);
 
 -- Insert data into conversation table
 INSERT INTO `forumdb`.`conversation` (`id`, `users_id1`, `users_id2`, `created_at`)
@@ -36,8 +36,8 @@ VALUES
 (1, 1, 2, '2024-10-01 12:30:00'),
 (2, 2, 3, '2024-10-02 15:45:00');
 
--- Insert data into massages table
-INSERT INTO `forumdb`.`massages` (`id`, `text`, `conversation_id`, `users_id`, `sended_at`)
+-- Insert data into messages table
+INSERT INTO `forumdb`.`messages` (`id`, `text`, `conversation_id`, `users_id`, `sended_at`)
 VALUES
 (1, 'Hello, how are you?', 1, 1, '2024-10-01 12:31:00'),
 (2, 'I am fine, thank you!', 1, 2, '2024-10-01 12:32:00'),
