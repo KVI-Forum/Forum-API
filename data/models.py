@@ -57,15 +57,13 @@ class Topic(BaseModel):
     id: Optional[int] = None
     name: str
     created_at: datetime
-    categories_id: int
 
     @classmethod
-    def from_query_result(cls,id,name,created_at,categories_id):
+    def from_query_result(cls,id,name,created_at):
         return cls(
             id=id,
             name=name, 
-            created_at=created_at,
-            categories_id=categories_id
+            created_at=created_at
         )
 
 
