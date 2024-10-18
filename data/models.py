@@ -96,6 +96,15 @@ class Conversation(BaseModel):
     users_id2: int
     created_at: Optional[datetime] = None
 
+    @classmethod
+    def from_query_result(cls,id,users_id1,users_id2,created_at):
+        return cls(
+            id=id,
+            users_id1=users_id1,
+            users_id2=users_id2,
+            created_at=created_at
+        )
+
 
 
 
@@ -105,6 +114,16 @@ class Message(BaseModel):
     conversation_id: int
     users_id: int
     sent_at: Optional[datetime] = None
+
+    @classmethod
+    def from_query_result(cls,id,text,conversation_id,users_id,sent_at):
+        return cls(
+            id=id,
+            text=text,
+            conversation_id=conversation_id,
+            users_id=users_id,
+            sent_at=sent_at
+        )
 
 
 

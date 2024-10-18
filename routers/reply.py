@@ -23,6 +23,6 @@ def create_reply(reply: Reply,token:str= Header()):
     verify_authenticated_user(token)
     reply_id = reply_service.create(reply.content,reply.topics_id, reply.users_id)
     if reply_id:
-        return Response(status_code=200,content=f"reply with id:{reply_id} and content:'{reply.content}' was created at {reply.created_at}.")
+        return Response(status_code=200,content=f"reply with id: {reply_id} and content:' {reply.content}' was created at {reply.created_at}.")
     else:
         return Response(status_code=404, content="Topic or user not found.")

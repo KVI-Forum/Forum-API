@@ -33,7 +33,7 @@ def create_topic(topic: Topic,token:str= Header()):
     verify_authenticated_user(token)
     topic_id = topic_service.create(topic.name,topic.categories_id)
     if topic_id:
-        return Response(status_code=200,content=f"topic with id:{topic_id} and name:'{topic.name}' was created.")
+        return Response(status_code=200,content=f"topic with id: {topic_id} and name: '{topic.name}' was created.")
     else:
         return Response(status_code=404, content="Category not found.")
 
