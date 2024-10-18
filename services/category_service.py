@@ -36,7 +36,7 @@ def exists(id: int):
             (id,)))
 
 
-def create(category: Category):
+def create_category(category: Category):
     generated_id = insert_query(
         'insert into categories(name) values(?)',
         (category.name,))

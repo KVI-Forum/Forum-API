@@ -7,17 +7,17 @@ from services import category_service
 def get_all(search: str = None):
     if search:
         data = read_query(
-            'select id, name, created_at from topics where name like ? ',
+            'select id, name, created_at,categories_id from topics where name like ? ',
             (f'%{search}%',))
     else:
-        data = read_query('select id, name , created_at from topics ')
+        data = read_query('select id, name , created_at, categories_id from topics ')
     
-    return (Topic.from_query_result(id, name, created_at) for id, name, created_at in data)
+    return (Topic.from_query_result(id, name, created_at,categories_id) for id, name, created_at,categories_id in data)
 
 
 def get_by_id(id: int):
     data = read_query(
-        '''SELECT id, name, created_at
+        '''SELECT id, name, created_at,categories_id
             FROM topics 
             WHERE id = ?''', (id,))
 

@@ -3,7 +3,7 @@ from pydantic import BaseModel, constr
 from datetime import datetime
 from typing import Optional
 # TODO: add field validation
-
+# TODO: fix the user model and service
 class User(BaseModel):
     id: Optional[int] = None
     first_name: str
@@ -56,16 +56,17 @@ class Category(BaseModel):
 class Topic(BaseModel):
     id: Optional[int] = None
     name: str
+    created_at: Optional[datetime] = None
     categories_id: int
-    created_at: datetime|None = None
 
     @classmethod
-    def from_query_result(cls,id,name,categories_id,created_at):
+    def from_query_result(cls,id,name,created_at,categories_id):
         return cls(
             id=id,
             name=name,
-            categories_id=categories_id,
-            created_at=created_at
+            created_at=created_at,
+            categories_id=categories_id
+
         )
 
 
@@ -74,8 +75,17 @@ class Reply(BaseModel):
     id: Optional[int] = None
     content: str
     topics_id: int
+    users_id:int
     created_at: Optional[datetime] = None
-
+    @classmethod
+    def from_query_result(cls,id,content,topics_id,users_id,created_at):
+        return cls(
+            id=id,
+            content=content,
+            topics_id=topics_id,
+            users_id= users_id,
+            created_at=created_at
+        )
 
 
 
