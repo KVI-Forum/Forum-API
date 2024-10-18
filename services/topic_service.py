@@ -50,16 +50,17 @@ def sort_topics(topics: list[Topic], *, attribute='name', reverse=False):
     
     return sorted(topics, key=sort_fn, reverse=reverse)
 
-def create(topic_name:str,category_name:str):
-    category = category_service.get_by_name(category_name)
-    if category is not None:
-        category_id = category.id
-        generated_id = insert_query("""insert into topics(name,categories_id)
-        VALUES(?,?)""",(topic_name,category_id))
-        return generated_id
-    else:
+def create(topic_name:str,cat_id:int):
+    category = category_service.get_by_id(cat_id)
+    if not category:
         return None
-#     Response(status_code=404, content="Category not found.")
+
+    generated_id = insert_query("""insert into topics(name,categories_id)
+    VALUES(?,?)""",(topic_name,category.id))
+    return generated_id
+
+
+
     
 
 

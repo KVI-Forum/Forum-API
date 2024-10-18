@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Response, Header
 
-from common.auth import get_user_or_raise_401
+from common.auth import get_user_or_raise_401, verify_authenticated_user
 from data.models import Topic
 from services import topic_service
 
@@ -28,11 +28,12 @@ def get_topic_by_id(id: int):
 
 
 @topic_router.post("/")
-def create_topic(topic_name,category_name,token:str= Header()):
-    user = get_user_or_raise_401(token)
-    topic = topic_service.create(topic_name,category_name)
-    if topic:
-        return Response(status_code=200,content=f"topic with id:{topic} and name:'{topic_name}' created.")
+def create_topic(topic: Topic,token:str= Header()):
+
+    verify_authenticated_user(token)
+    topic_id = topic_service.create(topic.name,topic.categories_id)
+    if topic_id:
+        return Response(status_code=200,content=f"topic with id:{topic_id} and name:'{topic.name}' was created.")
     else:
         return Response(status_code=404, content="Category not found.")
 
