@@ -8,3 +8,7 @@ def get_user_or_raise_401(token: str) -> User:
         raise HTTPException(status_code=401)
 
     return from_token(token)
+
+def verify_authenticated_user(token: str):
+    if not is_authenticated(token):
+        raise HTTPException(status_code=401)
