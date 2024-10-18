@@ -28,12 +28,14 @@ class User(BaseModel):
             email=email,
         )
     
+
+  # password -> <- email ?  
 class UserRegistration(BaseModel):
-    first_name: str
-    last_name: str
-    username: str
-    email: str
-    password: str
+    first_name: constr(min_length=2, max_length=30) = Field(..., description="First name of the user")
+    last_name: constr(min_length=2, max_length=30) = Field(..., description="Last name of the user")
+    username: constr(min_length=4, max_length=20) = Field(..., description="Username with minimum 4 and maximum 20 characters")
+    password: constr(min_length=8) = Field(..., description="Password must have at least 8 characters")
+    email: constr(regex=r'^[\w\.-]+@[\w\.-]+\.\w+$') = Field(..., description="Email address of the user")
 
 
 
