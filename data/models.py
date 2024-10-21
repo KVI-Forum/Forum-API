@@ -14,7 +14,7 @@ class User(BaseModel):
     username: constr(min_length=4, max_length=20) = Field(..., description="Username with minimum 4 and maximum 20 characters") 
     is_admin: Optional[bool] = Field(False, description="Whether the user has admin privileges") 
     password: constr(min_length=8) = Field(..., description="Password must have at least 8 characters") 
-    email: constr(regex=r'^[\w\.-]+@[\w\.-]+\.\w+$') = Field(..., description="Email address of the user")
+    email: constr(pattern=r'^[\w\.-]+@[\w\.-]+\.\w+$') = Field(..., description="Email address of the user")
 
     @classmethod
     def from_query_result(cls,id,first_name,last_name,username,is_admin,password, email):
@@ -35,7 +35,7 @@ class UserRegistration(BaseModel):
     last_name: constr(min_length=2, max_length=30) = Field(..., description="Last name of the user")
     username: constr(min_length=4, max_length=20) = Field(..., description="Username with minimum 4 and maximum 20 characters")
     password: constr(min_length=8) = Field(..., description="Password must have at least 8 characters")
-    email: constr(regex=r'^[\w\.-]+@[\w\.-]+\.\w+$') = Field(..., description="Email address of the user")
+    email: constr(pattern=r'^[\w\.-]+@[\w\.-]+\.\w+$') = Field(..., description="Email address of the user")
 
 
 
@@ -116,8 +116,8 @@ class Conversation(BaseModel):
 class Message(BaseModel):
     id: Optional[int] = None
     text: constr(min_length=2, max_length=500) = Field(..., description='Text of the message')
-    conversation_id: int = Field(..., 'ID associated with the conversation of the message')
-    users_id: int = Field(..., 'ID associated with the user creating the message')
+    conversation_id: int = Field(..., description= 'ID associated with the conversation of the message')
+    users_id: int = Field(..., description= 'ID associated with the user creating the message')
     sent_at: Optional[datetime] = None
 
     @classmethod
@@ -134,8 +134,8 @@ class Message(BaseModel):
 
 
 class Vote(BaseModel):
-    users_id: int = Field(..., 'ID associated with the user voting')
-    reply_id: int = Field(..., 'ID associated with reply of the vote')
+    users_id: int = Field(...,description= 'ID associated with the user voting')
+    reply_id: int = Field(...,description= 'ID associated with reply of the vote')
     type_vote: Optional[int] = None
     created_at: Optional[datetime] = None
 

@@ -39,7 +39,7 @@ def try_login(username: str, password: str):
     return next((User(id=id, first_name=firstname, last_name=lastname, username=username, email=email, password=password, is_admin=is_admin)
                  for id, firstname, lastname, username, email, password, is_admin in data), None)
 
-def is_authenticated(token: str) -> bool:
+def is_authenticated(token: str) -> bool: # TODO FIX 
     return any(read_query(
         'SELECT 1 FROM users where id = ? and username = ?',
         token.split(_SEPARATOR)))
