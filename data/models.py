@@ -131,7 +131,7 @@ class Message(BaseModel):
 class Vote(BaseModel):
     users_id: int
     reply_id: int
-    type_vote: Optional[int] = None
+    type_vote: int
     created_at: Optional[datetime] = None
 
 

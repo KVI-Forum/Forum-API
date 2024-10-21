@@ -165,7 +165,6 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`votes` (
   `reply_id` INT(11) NOT NULL,
   `type_vote` TINYINT(4) NULL DEFAULT NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`users_id`, `reply_id`),
   INDEX `fk_votes_users1_idx` (`users_id` ASC) VISIBLE,
   INDEX `fk_votes_reply1_idx` (`reply_id` ASC) VISIBLE,
   CONSTRAINT `fk_votes_reply1`
