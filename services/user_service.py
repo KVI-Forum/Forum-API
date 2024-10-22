@@ -1,3 +1,7 @@
+from http.client import HTTPException
+
+from starlette.responses import Response
+
 from data.database import insert_query, read_query
 from data.models import User
 
@@ -20,6 +24,13 @@ def user_exists(user_id: int):
 
 
 def create_user(user: User):
+    duplicate = read_query("""select username from users where username = ?""", (user.username,))
+    if duplicate:
+        return None
+    duplicate = read_query("""select email from users where email = ?""", (user.email,))
+    if duplicate:
+        return None
+
     generated_id = insert_query(
         'INSERT INTO users (first_name, last_name, username, password, email) VALUES (?, ?, ?, ?, ?)',
         (user.first_name, user.last_name, user.username, user.password, user.email)

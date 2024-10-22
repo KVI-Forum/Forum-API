@@ -17,11 +17,32 @@ def get_all(search: str = None):
 
 def get_by_id(id: int):
     data = read_query(
-        '''SELECT id, name, created_at,categories_id
-            FROM topics 
-            WHERE id = ?''', (id,))
+        '''
+        SELECT t.id, t.name, t.created_at, t.categories_id, r.content
+        FROM topics t
+        LEFT JOIN reply r ON t.id = r.topics_id
+        WHERE t.id = ?
+        ''', (id,)
+    )
 
-    return next((Topic.from_query_result(*row) for row in data), None)
+    topic_with_replies = {}
+
+    for row in data:
+        topic_id = row[0]
+
+        if topic_id not in topic_with_replies:
+
+            topic_with_replies[topic_id] = {
+                "topic_id": row[0],
+                "topic_name": row[1],
+                "created_at": row[2],
+                "categories_id": row[3],
+                "reply_content": []
+            }
+
+        if row[4] is not None:
+            topic_with_replies[topic_id]["reply_content"].append(row[4])
+    return list(topic_with_replies.values())
 
 
 # def exists(id: int):

@@ -15,11 +15,32 @@ def get_all(search: str = None):
 
 def get_by_id(id: int):
     data = read_query(
-        '''SELECT id, name, description
-            FROM categories 
-            WHERE id = ?''', (id,))
+        '''
+        SELECT c.id, c.name, c.description, t.name
+        FROM categories c
+        LEFT JOIN topics t ON c.id = t.categories_id
+        WHERE c.id = ?
+        ''', (id,)
+    )
 
-    return next((Category.from_query_result(*row) for row in data), None)
+    category_with_topics = {}
+
+    for row in data:
+        cat_id = row[0]
+
+        if cat_id not in category_with_topics:
+
+            category_with_topics[cat_id] = {
+                "category_id": row[0],
+                "category_name": row[1],
+                "description": row[2],
+                "topics":[]
+
+            }
+
+        if row[3] is not None:
+            category_with_topics[cat_id]["topics"].append(row[3])
+    return list(category_with_topics.values())
 
 def get_by_name(name: str):
     data = read_query(

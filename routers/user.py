@@ -29,9 +29,9 @@ def register(data: UserRegistration):
         email=data.email
     ) 
     user = user_service.create_user(user)
-    
+
     if user:
         token = user_service.create_token(user)
         return {'token': token}
     else:
-        return Response(status_code=400, content=f'Username {data.username} is taken.')
+        return Response(status_code=400, content=f'Username or Email is taken.')
