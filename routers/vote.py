@@ -15,4 +15,5 @@ def get_votes(token: str = Header()):
 @vote_router.put('/')
 def vote(vote: Vote, token: str = Header()):
     verify_authenticated_user(token)
-    return vote_service.vote(vote)
+    user_id = int(token.split(";")[0])
+    return vote_service.vote(vote,user_id)

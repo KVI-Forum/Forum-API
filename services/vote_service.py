@@ -5,27 +5,27 @@ from common.auth import verify_authenticated_user
 
 
 
-def vote(vote: Vote,token: str = Header()):
-   verify_authenticated_user(token)
-   user_id = int(token.split(';')[0])
-   reply_id = vote.reply_id
-   
-   user_votes = get_all_user_replies(user_id)
-
-   for user_vote in user_votes:
-       if user_vote == reply_id:
-            update_query('''update votes set type_vote = ? where users_id = ? and reply_id = ?''', (vote.type_vote,user_id,reply_id))
-            return Response(status_code=200)
-
-   insert_query('INSERT INTO votes (users_id, reply_id, type_vote) VALUES (?, ?, ?)', (user_id, reply_id, vote.type_vote))
-   return Response(status_code=200)
+def vote(vote: Vote, user_id: int):
+    reply_id = vote.reply_id
 
 
+    user_vote = read_query(
+        '''SELECT reply_id FROM votes WHERE users_id = ? AND reply_id = ?''',
+        (user_id, reply_id)
+    )
 
-def get_all_user_replies(user_id: int):
-    result = read_query('''select reply_id from votes where users_id = ?''', (user_id,))
-
-    return result
+    if user_vote:
+        update_query(
+            '''UPDATE votes SET type_vote = ? WHERE users_id = ? AND reply_id = ?''',
+            (vote.type_vote, user_id, reply_id)
+        )
+        return Response(status_code=200, content="Vote updated")
+    else:
+        insert_query(
+            '''INSERT INTO votes (users_id, reply_id, type_vote) VALUES (?, ?, ?)''',
+            (user_id, reply_id, vote.type_vote)
+        )
+        return Response(status_code=201, content="New vote created")
 
 
 def get_all():
