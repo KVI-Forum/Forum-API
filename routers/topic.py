@@ -29,13 +29,28 @@ def get_topic_by_id(id: int):
 
 @topic_router.post("/")
 def create_topic(topic: Topic,token:str= Header()):
-
+    user_id = token.split(";")[0]
     verify_authenticated_user(token)
-    topic_id = topic_service.create(topic.name,topic.categories_id)
+    topic_id = topic_service.create(topic.name,topic.categories_id,user_id)
     if topic_id:
         return Response(status_code=200,content=f"topic with id: {topic_id} and name: '{topic.name}' was created.")
     else:
         return Response(status_code=404, content="Category not found.")
+    
+@topic_router.patch("/best_reply/{id}")
+def update_best_reply(id: int, reply_id: int,token:str= Header()):
+    user_id = token.split(";")[0]
+    verify_authenticated_user(token)
+    topic = topic_service.get_by_id(id)
+    if topic is None:
+        return Response(status_code=404, content="Topic not found.")
+    else:
+        update = topic_service.update_best_reply(id, reply_id, user_id)
+        if update is False:
+            return Response(status_code=401, content="You are not the author of the topic.")
+
+        return Response(status_code=200, content="Best reply updated.")
+
 
 
 

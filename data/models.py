@@ -63,14 +63,16 @@ class Topic(BaseModel):
     name: constr(min_length=1, max_length=100) = Field(..., description='Name of the topic')
     created_at: Optional[datetime] = None
     categories_id: int = Field(..., description="ID of the category associated with the topic")
+    author_id: int = Field(..., description="ID of the user which created the topic")
 
     @classmethod
-    def from_query_result(cls,id,name,created_at,categories_id):
+    def from_query_result(cls,id,name,created_at,categories_id,author_id):
         return cls(
             id=id,
             name=name,
             created_at=created_at,
-            categories_id=categories_id
+            categories_id=categories_id,
+            author_id=author_id
 
         )
 
