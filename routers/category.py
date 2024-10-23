@@ -45,5 +45,21 @@ def create_category(category: Category,token:str=Header()):
     else:
         return Response(status_code=401, content="Category with that name already exists.")
 
+@category_router.put('/{id}')
+def update_access(id: int, category: Category, token: str = Header()):
+    category_data = category_service.get_by_id(id)
+    
+    if category_data is None:
+        return Response(status_code=404, content="Category not found.")
+    
+    verify_admin(token)
 
-
+    # Get the category_id from the first element
+    if category_data and len(category_data) > 0:
+        category_id = category_data[0]['category_id']
+        
+        # Now use the category_id in the update_access method
+        if category_service.update_access(category_id, category.locked):
+            return Response(status_code=200, content=f"Category with id: {category_id} was updated.")
+    
+    return Response(status_code=404, content="Category not found.")

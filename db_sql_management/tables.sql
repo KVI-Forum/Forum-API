@@ -23,8 +23,8 @@ USE `forumdb` ;
 CREATE TABLE IF NOT EXISTS `forumdb`.`categories` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
-  `description` MEDIUMTEXT NOT NULL,
-  `locked` TINYINT(4) NOT NULL DEFAULT 0,
+  `description` MEDIUMTEXT NULL DEFAULT NULL,
+  `locked` TINYINT(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
 ENGINE = InnoDB
@@ -57,7 +57,7 @@ DEFAULT CHARACTER SET = latin1;
 CREATE TABLE IF NOT EXISTS `forumdb`.`access` (
   `users_id` INT(11) NOT NULL,
   `categories_id` INT(11) NOT NULL,
-  `read_only` TINYINT(4) NULL DEFAULT 0,
+  `read_only` TINYINT(4) NULL DEFAULT NULL,
   PRIMARY KEY (`users_id`, `categories_id`),
   INDEX `fk_acsses_users1_idx` (`users_id` ASC) VISIBLE,
   INDEX `fk_acsses_categories1_idx` (`categories_id` ASC) VISIBLE,

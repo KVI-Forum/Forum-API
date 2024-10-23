@@ -43,13 +43,15 @@ class Category(BaseModel):
     id: Optional[int] = None
     name: constr(min_length=3, max_length=50) = Field(..., description='Name for the category')
     description: Optional[str] = None
+    locked : Optional[int]
 
     @classmethod
-    def from_query_result(cls,id,name,description):
+    def from_query_result(cls,id,name,description,locked):
         return cls(
             id=id,
             name=name,
-            description=description
+            description=description,
+            locked = locked
         )
 
 
@@ -66,7 +68,7 @@ class Topic(BaseModel):
     author_id: int = Field(..., description="ID of the user which created the topic")
 
     @classmethod
-    def from_query_result(cls,id,name,created_at,categories_id,author_id):
+    def from_query_result(cls,id,name,created_at,categories_id,author_id,):
         return cls(
             id=id,
             name=name,
