@@ -1,3 +1,5 @@
+from unicodedata import category
+
 from data.database import insert_query, read_query
 from data.models import Category
 
@@ -57,14 +59,16 @@ def exists(id: int):
             (id,)))
 
 
-def create_category(category: Category):
+def create(category_name:str, description:str, ):
+    category_check= get_by_name(category_name)
+    if category_check:
+        return None
+
     generated_id = insert_query(
-        'insert into categories(name) values(?)',
-        (category.name,))
+        'insert into categories(name,description) values(?,?)',
+        (category_name,description))
 
-    category.id = generated_id
-
-    return category
+    return generated_id
 
 def sort_categories(categories: list[Category], *, attribute='name', reverse=False):
     if attribute == 'name':

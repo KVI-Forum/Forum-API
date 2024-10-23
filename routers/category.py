@@ -1,6 +1,11 @@
+from email.header import Header
+
 from fastapi import APIRouter,Response
+
+from common.auth import verify_admin
 from data.models import Category
 from services import category_service
+from services.user_service import is_admin
 
 #TODO connect toppics to categories // SHOULD task (admin creates category)
 category_router = APIRouter(prefix='/categories')
@@ -30,8 +35,15 @@ def get_category_by_id(id: int):
     else:
         return category
     
-
-
+@category_router.post('/')
+def create_category(category: Category,token:str=Header()):
+    user_id = token.split(";")[0]
+    verify_admin(token)
+    category_id = category_service.create(category.name, category.description)
+    if category_id:
+        return Response(status_code=200, content=f"Category with id: {category_id} and name: '{category.name}' was created.")
+    else:
+        return Response(status_code=401, content="Category with that name already exists.")
 
 
 

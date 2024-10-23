@@ -55,6 +55,15 @@ def is_authenticated(token: str) -> bool: # TODO FIX
         'SELECT 1 FROM users where id = ? and username = ?',
         token.split(_SEPARATOR)))
 
+
+def is_admin(token: str):
+
+    user_id, username = token.split(_SEPARATOR)
+    data = read_query('''SELECT is_admin FROM users WHERE id = ? AND username = ?''', [user_id, username])
+    if data and data[0][0] == 1:
+        return True
+    return False
+
 def find_by_username(username: str):
     data = read_query('SELECT id, first_name, last_name, username, email, password, is_admin FROM users WHERE username = ?',
                       (username,))
