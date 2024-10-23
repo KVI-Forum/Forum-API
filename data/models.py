@@ -43,15 +43,15 @@ class Category(BaseModel):
     id: Optional[int] = None
     name: constr(min_length=3, max_length=50) = Field(..., description='Name for the category')
     description: Optional[str] = None
-    locked : Optional[int]
+    private : Optional[int]
 
     @classmethod
-    def from_query_result(cls,id,name,description,locked):
+    def from_query_result(cls,id,name,description,private):
         return cls(
             id=id,
             name=name,
             description=description,
-            locked = locked
+            private = private
         )
 
 

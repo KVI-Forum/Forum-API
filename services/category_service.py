@@ -1,32 +1,58 @@
 from unicodedata import category
-
 from data.database import insert_query, read_query, update_query
 from data.models import Category
+from services.user_service import is_admin
 
 
-def get_all(search: str = None):
-    if search:
-        data = read_query(
-            'select id, name, description,locked from categories where name like ? ',
-            (f'%{search}%',))
+def get_all(user_id: int, token: str):
+
+    if is_admin(token):
+        data = read_query('SELECT id, name, description, private FROM categories')
+        return [Category.from_query_result(id, name, description, private) for id, name, description, private in data]
+
     else:
-        data = read_query('select id, name , description,locked from categories ')
     
-    return (Category.from_query_result(id, name, description,locked) for id, name, description,locked in data)
+        data = read_query('''
+            SELECT c.id, c.name, c.description, c.private
+            FROM categories c
+            LEFT JOIN category_members cm ON c.id = cm.categories_id AND cm.users_id = ?
+            WHERE c.private = 0 OR cm.users_id IS NOT NULL;
+        ''', (user_id,))
+        
+        return [Category.from_query_result(id, name, description, private) for id, name, description, private in data]
 
 
-def get_by_id(id: int):
-    data = read_query('''
-        SELECT c.id, c.name, c.description, c.locked, t.name
-        FROM categories c
-        LEFT JOIN topics t ON c.id = t.categories_id
-        WHERE c.id = ?
-    ''', (id,))
+def get_by_id(id: int, user_id: int, token: str):
+    if is_admin(token):
+        data = read_query('''SELECT c.id, c.name, c.description, c.private, t.name
+            FROM categories c
+            LEFT JOIN topics t ON c.id = t.categories_id
+            WHERE c.id = ?''', (id,))
+        is_admin_user = True
+    else:
+        data = read_query('''
+            SELECT c.id, c.name, c.description, c.private, t.name,
+                (SELECT COUNT(*) 
+                    FROM category_members cm 
+                    WHERE cm.categories_id = c.id AND cm.users_id = ?) AS is_member
+            FROM categories c
+            LEFT JOIN topics t ON c.id = t.categories_id
+            WHERE c.id = ?
+        ''', (user_id, id))
+        is_admin_user = False
 
     category_with_topics = {}
 
     for row in data:
         cat_id = row[0]
+        is_private = row[3]
+        
+        if not is_admin_user:
+            is_member = row[5] 
+
+            
+            if is_private == 1 and is_member == 0:
+                return None  
 
         if cat_id not in category_with_topics:
             category_with_topics[cat_id] = {
@@ -34,18 +60,19 @@ def get_by_id(id: int):
                 "category_name": row[1],
                 "description": row[2],
                 "topics": [],
-                "locked": row[3]  # Ensure 'locked' is correctly stored here
+                "private": is_private  
             }
 
-        if row[4] is not None:  # row[4] now refers to 't.name' for topics
+        if row[4] is not None:  
             category_with_topics[cat_id]["topics"].append(row[4])
 
     return list(category_with_topics.values())
 
 
+
 def get_by_name(name: str):
     data = read_query(
-        '''SELECT id, name, description
+        '''SELECT id, name, description,private
             FROM categories 
             WHERE name = ?''', (name,))
 
@@ -80,11 +107,11 @@ def sort_categories(categories: list[Category], *, attribute='name', reverse=Fal
     return sorted(categories, key=sort_fn, reverse=reverse)
 
 
-def update_access(category_id: int, locked: int):
+def update_access(category_id: int, private: int):
     if not exists(category_id):
         return False
     
     return update_query(
-        'UPDATE categories SET locked = ? WHERE id = ?',
-        (locked, category_id)
+        'UPDATE categories SET private = ? WHERE id = ?',
+        (private, category_id)
     )

@@ -12,13 +12,15 @@ category_router = APIRouter(prefix='/categories')
 
 
 @category_router.get('/')
-def get_categories(sort: str | None = None, sort_by: str | None = None, search: str | None = None):
-    result = category_service.get_all(search)
+def get_categories(sort: str | None = None, sort_by: str | None = None, token: str = Header()):
+    user_id = token.split(";")[0]
+
+    result = category_service.get_all(user_id=user_id,token=token)
     if result is None:
         return Response(status_code=404, content="No categories found.")
     else:
         if sort and (sort == 'asc' or sort == 'desc'):
-            return category_service.sort(result, reverse=sort == 'desc', attribute=sort_by)
+            return category_service.sort_categories(result, reverse=sort == 'desc', attribute=sort_by)
         else:
             return result
         
@@ -27,8 +29,9 @@ def get_categories(sort: str | None = None, sort_by: str | None = None, search: 
 
 
 @category_router.get('/{id}')
-def get_category_by_id(id: int):
-    category = category_service.get_by_id(id)
+def get_category_by_id(id: int, token: str = Header()):
+    user_id = token.split(";")[0]
+    category = category_service.get_by_id(id, user_id,token)
 
     if category is None:
         return Response(status_code=404, content="Category not found.")
@@ -47,19 +50,18 @@ def create_category(category: Category,token:str=Header()):
 
 @category_router.put('/{id}')
 def update_access(id: int, category: Category, token: str = Header()):
-    category_data = category_service.get_by_id(id)
+    user_id = token.split(";")[0]
+    category_data = category_service.get_by_id(id,user_id,token)
     
     if category_data is None:
         return Response(status_code=404, content="Category not found.")
     
     verify_admin(token)
 
-    # Get the category_id from the first element
     if category_data and len(category_data) > 0:
         category_id = category_data[0]['category_id']
         
-        # Now use the category_id in the update_access method
-        if category_service.update_access(category_id, category.locked):
+        if category_service.update_access(category_id, category.private):
             return Response(status_code=200, content=f"Category with id: {category_id} was updated.")
     
-    return Response(status_code=404, content="Category not found.")
+    
