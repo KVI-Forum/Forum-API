@@ -23,7 +23,7 @@ app.include_router(vote_router)
 
 # TODO: Add new columns to the categories table to indicate:
 #       - Whether the category is private
-#       - Whether the category is locked
+#       - Whether the category is locked        !!! DONE 
 
 # TODO: Add an option to lock topics in the system.
 
@@ -35,7 +35,7 @@ app.include_router(vote_router)
 #       - Reply service
 #       - User service
 
-# TODO: Modify the access table to include:
+# TODO: Modify the access table to include: !!! DONE
 #       - Read access
 #       - Write access
 

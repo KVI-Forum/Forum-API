@@ -23,11 +23,12 @@ USE `forumdb` ;
 CREATE TABLE IF NOT EXISTS `forumdb`.`categories` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
-  `description` MEDIUMTEXT NULL DEFAULT NULL,
+  `description` MEDIUMTEXT NOT NULL,
+  `locked` TINYINT(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 7
+AUTO_INCREMENT = 6
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -46,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`users` (
   UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE,
   UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 8
+AUTO_INCREMENT = 6
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -56,7 +57,7 @@ DEFAULT CHARACTER SET = latin1;
 CREATE TABLE IF NOT EXISTS `forumdb`.`access` (
   `users_id` INT(11) NOT NULL,
   `categories_id` INT(11) NOT NULL,
-  `read_only` TINYINT(4) NULL DEFAULT NULL,
+  `read_only` TINYINT(4) NULL DEFAULT 0,
   PRIMARY KEY (`users_id`, `categories_id`),
   INDEX `fk_acsses_users1_idx` (`users_id` ASC) VISIBLE,
   INDEX `fk_acsses_categories1_idx` (`categories_id` ASC) VISIBLE,
@@ -123,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`messages` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 4
+AUTO_INCREMENT = 5
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -136,7 +137,7 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`topics` (
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP(),
   `categories_id` INT(11) NOT NULL,
   `best_reply_id` INT(11) NULL DEFAULT NULL,
-  `author_id` INT(200) NOT NULL,
+  `author_id` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `idtopics_UNIQUE` (`id` ASC) VISIBLE,
   INDEX `fk_topics_categories1_idx` (`categories_id` ASC) VISIBLE,
@@ -158,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`topics` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 3
+AUTO_INCREMENT = 7
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -185,7 +186,7 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`reply` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 3
+AUTO_INCREMENT = 6
 DEFAULT CHARACTER SET = latin1;
 
 
