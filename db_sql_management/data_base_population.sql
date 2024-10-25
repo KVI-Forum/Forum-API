@@ -15,7 +15,7 @@ INSERT INTO `forumdb`.`users` (`first_name`, `last_name`, `username`, `is_admin`
 ('David', 'Lee', 'davidlee', 0, 'password123', 'davidlee@example.com');
 
 -- Insert into access
-INSERT INTO `forumdb`.`access` (`users_id`, `categories_id`, `read_only`) VALUES
+INSERT INTO `forumdb`.`access` (`users_id`, `categories_id`, `access_type`) VALUES
 (1, 1, 0), -- Admin full access to General Discussion
 (2, 2, 1), -- Jane read-only access to Tech Talk
 (3, 3, 0), -- Michael full access to Gaming

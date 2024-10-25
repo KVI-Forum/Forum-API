@@ -6,7 +6,7 @@ from services import topic_service
 
 topic_router = APIRouter(prefix='/topics')
 
-@topic_router.get('/')
+@topic_router.get('')
 def get_topics(sort: str | None = None, sort_by: str | None = None, search: str | None = None):
     result = topic_service.get_all(search)
     if result is None:
@@ -27,7 +27,7 @@ def get_topic_by_id(id: int):
         return topic
 
 
-@topic_router.post("/")
+@topic_router.post("")
 def create_topic(topic: Topic,token:str= Header()):
     user_id = token.split(";")[0]
     verify_authenticated_user(token)

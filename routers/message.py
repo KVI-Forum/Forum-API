@@ -5,7 +5,7 @@ from common.auth import verify_authenticated_user
 
 message_router = APIRouter(prefix='/messages')
 
-@message_router.get('/')
+@message_router.get('')
 def get_messages(sort: str | None = None, sort_by: str | None = None, search: str | None = None):
     result = message_service.get_all(search)
     if result is None:
@@ -24,7 +24,7 @@ def get_message_by_id(id: int):
     else:
         return result
     
-@message_router.post('/')
+@message_router.post('')
 def create_message(message: Message,token:str = Header()):
     verify_authenticated_user(token)
     message_id = message_service.create(message.text, message.conversation_id, message.users_id)

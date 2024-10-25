@@ -5,7 +5,7 @@ from routers.topic import topic_router
 from routers.user import users_router
 from routers.message import message_router
 from routers.conversation import conversation_router
-from routers.vote import vote_router
+
 
 app = FastAPI()
 app.include_router(category_router)
@@ -14,7 +14,7 @@ app.include_router(users_router)
 app.include_router(reply_router)
 app.include_router(message_router)
 app.include_router(conversation_router)
-app.include_router(vote_router)
+
 
 
 

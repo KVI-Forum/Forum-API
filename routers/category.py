@@ -11,7 +11,7 @@ from services.user_service import is_admin
 category_router = APIRouter(prefix='/categories')
 
 
-@category_router.get('/')
+@category_router.get('')
 def get_categories(sort: str | None = None, sort_by: str | None = None, token: str = Header()):
     user_id = token.split(";")[0]
 
@@ -38,7 +38,7 @@ def get_category_by_id(id: int, token: str = Header()):
     else:
         return category
     
-@category_router.post('/')
+@category_router.post('')
 def create_category(category: Category,token:str=Header()):
     user_id = token.split(";")[0]
     verify_admin(token)
