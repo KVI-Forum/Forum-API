@@ -37,8 +37,14 @@ def get_votes(token: str = Header()):
     return vote_service.get_all()
 
 
-@reply_router.put('/vote')
-def vote(vote: Vote, token: str = Header()):
+@reply_router.put('/{id}/upvote')
+def vote(id:int, token: str = Header()):
     verify_authenticated_user(token)
     user_id = int(token.split(";")[0])
-    return vote_service.vote(vote,user_id)
+    return vote_service.upvote(id,user_id)
+
+@reply_router.put('/{id}/downvote')
+def vote(id:int, token: str = Header()):
+    verify_authenticated_user(token)
+    user_id = int(token.split(";")[0])
+    return vote_service.downvote(id,user_id)
