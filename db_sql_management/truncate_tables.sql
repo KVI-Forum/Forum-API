@@ -6,7 +6,6 @@ TRUNCATE TABLE `votes`;
 TRUNCATE TABLE `reply`;
 TRUNCATE TABLE `messages`;
 TRUNCATE TABLE `conversation`;
-TRUNCATE TABLE `access`;
 
 -- Truncate parent tables
 TRUNCATE TABLE `topics`;
