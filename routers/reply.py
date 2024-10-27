@@ -1,12 +1,15 @@
 from fastapi import APIRouter, Response, Header
 
 from common.auth import get_user_or_raise_401, verify_authenticated_user
-from data.models import Reply
-from services import reply_service
+from data.models import Reply, Vote
+from services import reply_service, vote_service
+from fastapi import APIRouter, Header
+
+
 
 reply_router = APIRouter(prefix='/reply')
 
-@reply_router.get('/')
+@reply_router.get('')
 def get_replies(sort: str | None = None, sort_by: str | None = None, search: str | None = None):
     result = reply_service.get_all(search)
     if result is None:
@@ -17,7 +20,7 @@ def get_replies(sort: str | None = None, sort_by: str | None = None, search: str
         else:
             return result
 
-@reply_router.post("/")
+@reply_router.post('')
 def create_reply(reply: Reply,token:str= Header()):
 
     verify_authenticated_user(token)
@@ -27,3 +30,21 @@ def create_reply(reply: Reply,token:str= Header()):
     else:
         return Response(status_code=404, content="Topic or user not found.")
 
+
+@reply_router.get('/all_votes')
+def get_votes(token: str = Header()):
+    verify_authenticated_user(token)
+    return vote_service.get_all()
+
+
+@reply_router.put('/{id}/upvote')
+def vote(id:int, token: str = Header()):
+    verify_authenticated_user(token)
+    user_id = int(token.split(";")[0])
+    return vote_service.upvote(id,user_id)
+
+@reply_router.put('/{id}/downvote')
+def vote(id:int, token: str = Header()):
+    verify_authenticated_user(token)
+    user_id = int(token.split(";")[0])
+    return vote_service.downvote(id,user_id)

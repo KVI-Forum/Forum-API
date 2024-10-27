@@ -152,3 +152,9 @@ class LoginData(BaseModel):
     username: TUsername #type: ignore
     password: TPassword #type: ignore
 
+
+class CategoryMembers(BaseModel):
+    categories_id: int = Field(...,description='ID associated with the categories')
+    users_id: int = Field(...,description='ID associated with the user')
+    access_type: Optional[int] = None
+

@@ -52,21 +52,21 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `forumdb`.`access`
+-- Table `forumdb`.`category_members`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `forumdb`.`access` (
-  `users_id` INT(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `forumdb`.`category_members` (
   `categories_id` INT(11) NOT NULL,
-  `access_type` TINYINT(4) NULL DEFAULT NULL COMMENT '1 - WRITE\n0 - READ ONLY',
-  PRIMARY KEY (`users_id`, `categories_id`),
-  INDEX `fk_acsses_users1_idx` (`users_id` ASC) VISIBLE,
-  INDEX `fk_acsses_categories1_idx` (`categories_id` ASC) VISIBLE,
-  CONSTRAINT `fk_acsses_categories1`
+  `users_id` INT(11) NOT NULL,
+  `access_type` TINYINT(1) NOT NULL,
+  PRIMARY KEY (`categories_id`, `users_id`),
+  INDEX `fk_categories_has_users_users1_idx` (`users_id` ASC) VISIBLE,
+  INDEX `fk_categories_has_users_categories1_idx` (`categories_id` ASC) VISIBLE,
+  CONSTRAINT `fk_categories_has_users_categories1`
     FOREIGN KEY (`categories_id`)
     REFERENCES `forumdb`.`categories` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_acsses_users1`
+  CONSTRAINT `fk_categories_has_users_users1`
     FOREIGN KEY (`users_id`)
     REFERENCES `forumdb`.`users` (`id`)
     ON DELETE NO ACTION
@@ -159,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`topics` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 7
+AUTO_INCREMENT = 6
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -206,29 +206,6 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`votes` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_votes_users1`
-    FOREIGN KEY (`users_id`)
-    REFERENCES `forumdb`.`users` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
-
-
--- -----------------------------------------------------
--- Table `forumdb`.`category_members`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `forumdb`.`category_members` (
-  `categories_id` INT(11) NOT NULL,
-  `users_id` INT(11) NOT NULL,
-  PRIMARY KEY (`categories_id`, `users_id`),
-  INDEX `fk_categories_has_users_users1_idx` (`users_id` ASC) VISIBLE,
-  INDEX `fk_categories_has_users_categories1_idx` (`categories_id` ASC) VISIBLE,
-  CONSTRAINT `fk_categories_has_users_categories1`
-    FOREIGN KEY (`categories_id`)
-    REFERENCES `forumdb`.`categories` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_categories_has_users_users1`
     FOREIGN KEY (`users_id`)
     REFERENCES `forumdb`.`users` (`id`)
     ON DELETE NO ACTION

@@ -14,13 +14,7 @@ INSERT INTO `forumdb`.`users` (`first_name`, `last_name`, `username`, `is_admin`
 ('Sara', 'Connor', 'saraconnor', 0, 'password123', 'saraconnor@example.com'),
 ('David', 'Lee', 'davidlee', 0, 'password123', 'davidlee@example.com');
 
--- Insert into access
-INSERT INTO `forumdb`.`access` (`users_id`, `categories_id`, `read_only`) VALUES
-(1, 1, 0), -- Admin full access to General Discussion
-(2, 2, 1), -- Jane read-only access to Tech Talk
-(3, 3, 0), -- Michael full access to Gaming
-(4, 4, 0), -- Sara full access to News
-(5, 5, 1); -- David read-only access to Feedback
+
 
 -- Insert into conversation (private messaging between users)
 INSERT INTO `forumdb`.`conversation` (`users_id1`, `users_id2`) VALUES

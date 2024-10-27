@@ -5,7 +5,7 @@ from common.auth import verify_authenticated_user
 
 conversation_router = APIRouter(prefix='/conversations')
 
-@conversation_router.get('/')
+@conversation_router.get('')
 def get_conversations(token: str = Header()):
     verify_authenticated_user(token)
     user_id = token.split(";")[0]
