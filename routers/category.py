@@ -13,7 +13,7 @@ category_router = APIRouter(prefix='/categories')
 
 @category_router.get('')
 def get_categories(sort: str | None = None, sort_by: str | None = None, token: str = Header()):
-    user_id = token.split(";")[0]
+    user_id = int(token.split(";")[0])
 
     result = category_service.get_all(user_id=user_id,token=token)
     if result is None:

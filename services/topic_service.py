@@ -24,9 +24,10 @@ def get_by_id(id: int):
         WHERE t.id = ?
         ''', (id,)
     )
+    construct_response(data)
 
+def construct_response(data):
     topic_with_replies = {}
-
     for row in data:
         topic_id = row[0]
 
@@ -44,23 +45,6 @@ def get_by_id(id: int):
         if row[5] is not None:
             topic_with_replies[topic_id]["reply_content"].append(row[5])
     return list(topic_with_replies.values())
-
-
-# def exists(id: int):
-#     return any(
-#         read_query(
-#             'select id, name from categories where id = ?',
-#             (id,)))
-
-
-# def create(category: Category):
-#     generated_id = insert_query(
-#         'insert into categories(name) values(?)',
-#         (category.name,))
-
-#     category.id = generated_id
-
-#     return category
 
 def sort_topics(topics: list[Topic], *, attribute='name', reverse=False):
     if attribute == 'name':

@@ -1,7 +1,13 @@
-from fastapi import APIRouter,Response
+from unicodedata import category
+
+from fastapi import APIRouter, Response, Header
+
+from common.auth import verify_admin
 from data.models import LoginData
-from services import user_service
+from routers.category import get_category_by_id
+from services import user_service, category_service
 from data.models import User , UserRegistration
+from services.user_service import get_user_by_id, give_read_access, give_write_access, revoke_access
 
 users_router = APIRouter(prefix='/users')
 
@@ -35,3 +41,59 @@ def register(data: UserRegistration):
         return {'token': token}
     else:
         return Response(status_code=400, content=f'Username or Email is taken.')
+
+from fastapi import HTTPException, Response
+
+@users_router.patch("/read_access/{user_id}/category/{category_id}")
+def read_access(user_id: int, category_id: int, token: str = Header()):
+    user_data = get_user_by_id(user_id)
+    category_data = category_service.get_by_id(category_id, user_id, token)
+
+    if not user_data or not category_data:
+        return Response(status_code=404, content="Category or user not found.")
+
+    verify_admin(token)
+
+    access_granted = give_read_access(user_id, category_id)
+    if access_granted:
+        return Response(status_code=200, content="Read access granted successfully.")
+    else:
+        return Response(status_code=500, content="Failed to grant read access.")
+
+@users_router.patch("/write_access/{user_id}/category/{category_id}")
+def write_access(user_id: int, category_id: int, token: str = Header()):
+    user_data = get_user_by_id(user_id)
+    category_data = category_service.get_by_id(category_id, user_id, token)
+
+    if not user_data or not category_data:
+        return Response(status_code=404, content="Category or user not found.")
+
+    verify_admin(token)
+
+    access_granted = give_write_access(user_id, category_id)
+    if access_granted:
+        return Response(status_code=200, content="Write access granted successfully.")
+    else:
+        return Response(status_code=500, content="Failed to grant write access.")
+
+@users_router.patch("/revoke_access/{user_id}/category/{category_id}")
+def revoke_access_endpoint(user_id: int, category_id: int, token: str = Header()):
+    # Step 1: Verify user and category existence
+    user_data = get_user_by_id(user_id)
+    category_data = category_service.get_by_id(category_id, user_id, token)
+
+    if not user_data or not category_data:
+        return Response(status_code=404, content="Category or user not found.")
+
+    # Step 2: Verify admin privileges
+    try:
+        verify_admin(token)
+    except HTTPException:
+        return Response(status_code=401, content="Unauthorized access.")
+
+    # Step 3: Attempt to revoke access
+    access_revoked = revoke_access(user_id, category_id)
+    if access_revoked:
+        return Response(status_code=200, content="Access revoked successfully.")
+    else:
+        return Response(status_code=404, content="No access found to revoke.")

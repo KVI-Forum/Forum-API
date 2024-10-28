@@ -1,11 +1,8 @@
 from fastapi import APIRouter, Response, Header
 
 from common.auth import get_user_or_raise_401, verify_authenticated_user
-from data.models import Reply, Vote
+from data.models import Reply
 from services import reply_service, vote_service
-from fastapi import APIRouter, Header
-
-
 
 reply_router = APIRouter(prefix='/reply')
 

@@ -39,7 +39,7 @@ def create_topic(topic: Topic,token:str= Header()):
     
 @topic_router.patch("/best_reply/{id}")
 def update_best_reply(id: int, reply_id: int,token:str= Header()):
-    user_id = token.split(";")[0]
+    user_id = int(token.split(";")[0])
     verify_authenticated_user(token)
     topic = topic_service.get_by_id(id)
     if topic is None:

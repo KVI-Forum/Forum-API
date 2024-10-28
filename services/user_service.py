@@ -2,7 +2,7 @@ from http.client import HTTPException
 
 from starlette.responses import Response
 
-from data.database import insert_query, read_query
+from data.database import insert_query, read_query, update_query
 from data.models import User
 
 _SEPARATOR = ';'
@@ -14,10 +14,10 @@ def all_users():
 
 
 def get_user_by_id(user_id: int):
-    data = read_query('SELECT id, first_name, last_name, username, email, is_admin FROM users WHERE id = ?',
+    data = read_query('SELECT id, first_name, last_name, username,is_admin,password, email FROM users WHERE id = ?',
                       (user_id,))
-    return next((User(id=id, first_name=first_name, last_name=last_name, username=username, email=email, is_admin=is_admin)
-                 for id, first_name, last_name, username, email, is_admin in data), None)
+    return next((User(id=id, first_name=first_name, last_name=last_name, username=username,is_admin=is_admin,password=password, email=email, )
+                 for id, first_name, last_name, username, is_admin ,password,email in data), None)
 
 def user_exists(user_id: int):
     return any(read_query('SELECT id FROM users WHERE id = ?', (user_id,)))
@@ -76,3 +76,55 @@ def from_token(token: str) -> User | None:
     _, username = token.split(_SEPARATOR)
 
     return find_by_username(username)
+
+def give_read_access(user_id: int, category_id: int):
+
+    existing_access = read_query(
+        'SELECT access_type FROM category_members WHERE users_id = ? AND categories_id = ?',
+        (user_id, category_id)
+    )
+
+    if existing_access:
+        return update_query(
+            'UPDATE category_members SET access_type = 1 WHERE users_id = ? AND categories_id = ?',
+            (user_id, category_id)
+        )
+    else:
+        return insert_query(
+            'INSERT INTO category_members (users_id, categories_id, access_type) VALUES (?, ?, 1)',
+            (user_id, category_id)
+        )
+def give_write_access(user_id: int, category_id: int):
+
+    existing_access = read_query(
+        'SELECT access_type FROM category_members WHERE users_id = ? AND categories_id = ?',
+        (user_id, category_id)
+    )
+
+    if existing_access:
+        return update_query(
+            'UPDATE category_members SET access_type = 2 WHERE users_id = ? AND categories_id = ?',
+            (user_id, category_id)
+        )
+    else:
+        return insert_query(
+            'INSERT INTO category_members (users_id, categories_id, access_type) VALUES (?, ?, 2)',
+            (user_id, category_id)
+        )
+def revoke_access(user_id: int, category_id: int) -> bool:
+    # Check if the user currently has any access in the specified category
+    existing_access = read_query(
+        'SELECT access_type FROM category_members WHERE users_id = ? AND categories_id = ?',
+        (user_id, category_id)
+    )
+
+    if not existing_access:
+        # No access found, nothing to revoke
+        return False
+
+    # Update the record to revoke access (set access_type to 0)
+    result = update_query(
+        'DELETE FROM category_members WHERE users_id = ? AND categories_id = ?',
+        (user_id, category_id)
+    )
+    return result
