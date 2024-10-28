@@ -95,7 +95,6 @@ def give_read_access(user_id: int, category_id: int):
             (user_id, category_id)
         )
 def give_write_access(user_id: int, category_id: int):
-
     existing_access = read_query(
         'SELECT access_type FROM category_members WHERE users_id = ? AND categories_id = ?',
         (user_id, category_id)
@@ -112,19 +111,28 @@ def give_write_access(user_id: int, category_id: int):
             (user_id, category_id)
         )
 def revoke_access(user_id: int, category_id: int) -> bool:
-    # Check if the user currently has any access in the specified category
     existing_access = read_query(
         'SELECT access_type FROM category_members WHERE users_id = ? AND categories_id = ?',
         (user_id, category_id)
     )
 
     if not existing_access:
-        # No access found, nothing to revoke
+
         return False
 
-    # Update the record to revoke access (set access_type to 0)
     result = update_query(
         'DELETE FROM category_members WHERE users_id = ? AND categories_id = ?',
         (user_id, category_id)
     )
     return result
+
+
+def get_privileged_users_by_category(category_id: int):
+    data = read_query('''
+        SELECT u.username, cm.access_type 
+        FROM category_members cm 
+        JOIN users u ON cm.users_id = u.id 
+        WHERE cm.categories_id = ?
+    ''', (category_id,))
+
+    return data
