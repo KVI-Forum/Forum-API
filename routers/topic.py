@@ -7,8 +7,9 @@ from services import topic_service
 topic_router = APIRouter(prefix='/topics')
 
 @topic_router.get('')
-def get_topics(sort: str | None = None, sort_by: str | None = None, search: str | None = None):
-    result = topic_service.get_all(search)
+def get_topics(token:str ,sort: str | None = None, sort_by: str | None = None, search: str | None = None):
+    user_id = int(token.split(";")[0])
+    result = topic_service.get_all(user_id,search)
     if result is None:
         return Response(status_code=404, content="No topics found.")
     else:
@@ -18,8 +19,9 @@ def get_topics(sort: str | None = None, sort_by: str | None = None, search: str 
             return result
 
 @topic_router.get('/{id}')
-def get_topic_by_id(id: int):
-    topic = topic_service.get_by_id(id)
+def get_topic_by_id(token:str, id: int):
+    user_id = int(token.split(";")[0])
+    topic = topic_service.get_by_id(id,user_id)
 
     if topic is None:
         return Response(status_code=404, content="Topic not found.")
@@ -29,13 +31,13 @@ def get_topic_by_id(id: int):
 
 @topic_router.post("")
 def create_topic(topic: Topic,token:str= Header()):
-    user_id = token.split(";")[0]
+    user_id = int(token.split(";")[0])
     verify_authenticated_user(token)
-    topic_id = topic_service.create(topic.name,topic.categories_id,user_id)
+    topic_id = topic_service.create(topic.name,topic.categories_id,user_id,token)
     if topic_id:
         return Response(status_code=200,content=f"topic with id: {topic_id} and name: '{topic.name}' was created.")
     else:
-        return Response(status_code=404, content="Category not found.")
+        return Response(status_code=404, content="Category not found or locked.")
     
 @topic_router.patch("/best_reply/{id}")
 def update_best_reply(id: int, reply_id: int,token:str= Header()):

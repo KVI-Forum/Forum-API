@@ -19,9 +19,9 @@ def get_replies(sort: str | None = None, sort_by: str | None = None, search: str
 
 @reply_router.post('')
 def create_reply(reply: Reply,token:str= Header()):
-
+    user_id = int(token.split(";")[0])
     verify_authenticated_user(token)
-    reply_id = reply_service.create(reply.content,reply.topics_id, reply.users_id)
+    reply_id = reply_service.create(reply.content,reply.topics_id, user_id)
     if reply_id:
         return Response(status_code=200,content=f"reply with id: {reply_id} and content:' {reply.content}' was created at {reply.created_at}.")
     else:

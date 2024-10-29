@@ -61,8 +61,8 @@ def update_access(id: int, category: Category, token: str = Header()):
     if category_data and len(category_data) > 0:
         category_id = category_data[0]['category_id']
         
-        if category_service.update_access(category_id, category.private):
-            return Response(status_code=200, content=f"Category with id: {category_id} was updated.")
+        if category_service.make_category_private(category_id):
+            return Response(status_code=200, content=f"Category with id: {category_id} status changed.")
     
     
 @category_router.patch("/lock_category/{id}")

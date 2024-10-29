@@ -27,12 +27,13 @@ def sort_replies(replies: list[Reply], *, attribute='created_at', reverse=False)
     return sorted(replies, key=sort_fn, reverse=reverse)
 
 def create(content:str,topics_id:int,users_id:int):
-    topic = topic_service.get_by_id(topics_id)
-    # user = user_service.get_user_by_id(users_id)
+
+    topic = topic_service.get_by_id(topics_id,users_id)
+    user = user_service.get_user_by_id(users_id)
 
     if not topic:
         return None
 
     generated_id = insert_query("""insert into reply(content,topics_id,users_id)
-    VALUES(?,?,?)""",(content,topic.id,users_id))
+    VALUES(?,?,?)""",(content,topics_id,users_id))
     return generated_id

@@ -7,19 +7,19 @@ from services.user_service import is_admin
 def get_all(user_id: int, token: str):
 
     if is_admin(token):
-        data = read_query('SELECT id, name, description, private FROM categories')
-        return [Category.from_query_result(id, name, description, private) for id, name, description, private in data]
+        data = read_query('SELECT id, name, description, private, locked FROM categories')
+        return [Category.from_query_result(id, name, description, private,locked) for id, name, description, private,locked in data]
 
     else:
     
         data = read_query('''
-            SELECT c.id, c.name, c.description, c.private
+            SELECT c.id, c.name, c.description, c.private,c.locked
             FROM categories c
             LEFT JOIN category_members cm ON c.id = cm.categories_id AND cm.users_id = ?
             WHERE c.private = 0 OR cm.users_id IS NOT NULL;
         ''', (user_id,))
         
-        return [Category.from_query_result(id, name, description, private) for id, name, description, private in data]
+        return [Category.from_query_result(id, name, description, private,locked) for id, name, description, private,locked in data]
 
 
 def get_by_id(id: int, user_id: int, token: str):
@@ -106,15 +106,38 @@ def sort_categories(categories: list[Category], *, attribute='name', reverse=Fal
     
     return sorted(categories, key=sort_fn, reverse=reverse)
 
+def make_category_private(category_id: int):
 
-def update_access(category_id: int, private: int):
-    if not exists(category_id):
-        return False
-    
-    return update_query(
-        'UPDATE categories SET private = ? WHERE id = ?',
-        (private, category_id)
-    )
+    result = update_query('UPDATE categories SET private = 1 WHERE id = ?', (category_id,))
+
+
+    user_ids = read_query('''
+        SELECT DISTINCT t.author_id 
+        FROM topics t 
+        WHERE t.categories_id = ?
+        UNION
+        SELECT DISTINCT r.users_id
+        FROM reply r
+        JOIN topics t ON r.topics_id = t.id
+        WHERE t.categories_id = ?
+    ''', (category_id, category_id))
+
+
+    for (user_id,) in user_ids:
+        insert_query('''
+                INSERT IGNORE INTO category_members (users_id, categories_id, access_type)
+                VALUES (?, ?, 2)
+            ''', (user_id, category_id))
+    return result
+
+# def update_access(category_id: int, private: int):
+#     if not exists(category_id):
+#         return False
+#
+#     return update_query(
+#         'UPDATE categories SET private = ? WHERE id = ?',
+#         (private, category_id)
+#     )
 def lock(id:int):
     data = read_query('''
         SELECT id, name, description, private,locked
@@ -140,5 +163,12 @@ def unlock(id:int):
         'UPDATE categories SET locked = 0 WHERE id = ?',
         (id,)
     )
+    else:
+        return False
+
+def check_private(id:int):
+    data = read_query("""select private from categories where id = ?""", (id,))
+    if data[0][0] == 1:
+        return True
     else:
         return False
