@@ -79,16 +79,33 @@ def update_best_reply(topic_id: int, reply_id: int, user_id: int):
     update_result = update_query('UPDATE topics SET best_reply_id = ? WHERE id = ?', (reply_id, topic_id))
     print(f"Update result: {update_result}")
 
-    # topic = get_by_id(topic_id)
-    # if not topic:
-    #     return None
-    
-    # if topic[0]['author_id'] != user_id:
-    #     return False
-    
-    # update_result = update_query('UPDATE topics SET best_reply_id = ? WHERE id = ?', (reply_id, topic_id))
-    # return update_result
-    
+def lock(id:int):
+    data = read_query('''
+        SELECT id, name, created_at, categories_id,author_id, locked
+        FROM topics
+        WHERE id = ?
+        ''', (id,))
+    if data:
+        return update_query(
+        'UPDATE topics SET locked = 1 WHERE id = ?',
+        (id,)
+    )
+    else:
+        return False
+
+def unlock(id:int):
+    data = read_query('''
+        SELECT id, name, created_at, categories_id,author_id, locked
+        FROM topics
+        WHERE id = ?
+        ''', (id,))
+    if data:
+        return update_query(
+        'UPDATE topics SET locked = 0 WHERE id = ?',
+        (id,)
+    )
+    else:
+        return False
 
 
 

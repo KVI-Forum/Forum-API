@@ -1,6 +1,6 @@
 
 
-from fastapi import APIRouter,Response,Header
+from fastapi import APIRouter, Response, Header, HTTPException
 
 from common.auth import verify_admin
 from data.models import Category
@@ -65,3 +65,27 @@ def update_access(id: int, category: Category, token: str = Header()):
             return Response(status_code=200, content=f"Category with id: {category_id} was updated.")
     
     
+@category_router.patch("/lock_category/{id}")
+
+def lock_category(id: int, token:str= Header()):
+    try:
+        verify_admin(token)
+    except HTTPException:
+        return Response(status_code=401, content="Unauthorized access.")
+
+    result = category_service.lock(id)
+    if result is False:
+        return Response(status_code=404, content="category not found.")
+    return Response(status_code=200, content="category locked.")
+
+@category_router.patch("/unlock_category/{id}")
+def unlock_category(id: int, token:str= Header()):
+    try:
+        verify_admin(token)
+    except HTTPException:
+        return Response(status_code=401, content="Unauthorized access.")
+
+    result = category_service.unlock(id)
+    if result is False:
+        return Response(status_code=404, content="Category not found.")
+    return Response(status_code=200, content="Category unlocked.")

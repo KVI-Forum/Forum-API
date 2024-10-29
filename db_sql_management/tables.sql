@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`categories` (
   `name` VARCHAR(45) NOT NULL,
   `description` MEDIUMTEXT NULL DEFAULT NULL,
   `private` TINYINT(1) NOT NULL DEFAULT 0,
+  `locked` TINYINT(4) NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
 ENGINE = InnoDB
@@ -138,6 +139,7 @@ CREATE TABLE IF NOT EXISTS `forumdb`.`topics` (
   `categories_id` INT(11) NOT NULL,
   `best_reply_id` INT(11) NULL DEFAULT NULL,
   `author_id` INT(11) NOT NULL,
+  `locked` TINYINT(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `idtopics_UNIQUE` (`id` ASC) VISIBLE,
   INDEX `fk_topics_categories1_idx` (`categories_id` ASC) VISIBLE,

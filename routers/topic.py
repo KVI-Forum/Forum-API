@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Response, Header
+from fastapi import APIRouter, Response, Header, HTTPException
 
-from common.auth import get_user_or_raise_401, verify_authenticated_user
+from common.auth import get_user_or_raise_401, verify_authenticated_user, verify_admin
 from data.models import Topic
 from services import topic_service
 
@@ -50,6 +50,32 @@ def update_best_reply(id: int, reply_id: int,token:str= Header()):
             return Response(status_code=401, content="You are not the author of the topic.")
 
         return Response(status_code=200, content="Best reply updated.")
+@topic_router.patch("/lock_topic/{id}")
+
+def lock_topic(id: int, token:str= Header()):
+    try:
+        verify_admin(token)
+    except HTTPException:
+        return Response(status_code=401, content="Unauthorized access.")
+
+    result = topic_service.lock(id)
+    if result is False:
+        return Response(status_code=404, content="Topic not found.")
+    return Response(status_code=200, content="Topic locked.")
+
+@topic_router.patch("/unlock_topic/{id}")
+def unlock_topic(id: int, token:str= Header()):
+    try:
+        verify_admin(token)
+    except HTTPException:
+        return Response(status_code=401, content="Unauthorized access.")
+
+    result = topic_service.unlock(id)
+    if result is False:
+        return Response(status_code=404, content="Topic not found.")
+    return Response(status_code=200, content="Topic unlocked.")
+
+
 
 
 

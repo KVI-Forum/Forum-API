@@ -115,3 +115,30 @@ def update_access(category_id: int, private: int):
         'UPDATE categories SET private = ? WHERE id = ?',
         (private, category_id)
     )
+def lock(id:int):
+    data = read_query('''
+        SELECT id, name, description, private,locked
+        FROM categories
+        WHERE id = ?
+        ''', (id,))
+    if data:
+        return update_query(
+        'UPDATE categories SET locked = 1 WHERE id = ?',
+        (id,)
+    )
+    else:
+        return False
+
+def unlock(id:int):
+    data = read_query('''
+        SELECT id, name, description, private,locked
+        FROM categories
+        WHERE id = ?
+        ''', (id,))
+    if data:
+        return update_query(
+        'UPDATE categories SET locked = 0 WHERE id = ?',
+        (id,)
+    )
+    else:
+        return False
