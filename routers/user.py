@@ -12,7 +12,7 @@ from services.user_service import get_user_by_id, give_read_access, give_write_a
 
 users_router = APIRouter(prefix='/users')
 
-#todo
+
 @users_router.post('/login')
 def login(data: LoginData):
     user = user_service.try_login(data.username, data.password)
@@ -45,7 +45,7 @@ def register(data: UserRegistration):
 
 from fastapi import HTTPException, Response
 
-@users_router.patch("/read_access/{user_id}/category/{category_id}")
+@users_router.patch("/{user_id}/category/{category_id}/read")
 def read_access(user_id: int, category_id: int, token: str = Header()):
     user_data = get_user_by_id(user_id)
     category_data = category_service.get_by_id(category_id, user_id, token)
@@ -61,7 +61,7 @@ def read_access(user_id: int, category_id: int, token: str = Header()):
     else:
         return Response(status_code=500, content="Failed to grant read access.")
 
-@users_router.patch("/write_access/{user_id}/category/{category_id}")
+@users_router.patch("/{user_id}/category/{category_id}/write")
 def write_access(user_id: int, category_id: int, token: str = Header()):
     user_data = get_user_by_id(user_id)
     category_data = category_service.get_by_id(category_id, user_id, token)
@@ -77,7 +77,7 @@ def write_access(user_id: int, category_id: int, token: str = Header()):
     else:
         return Response(status_code=500, content="Failed to grant write access.")
 
-@users_router.patch("/revoke_access/{user_id}/category/{category_id}")
+@users_router.patch("/{user_id}/category/{category_id}/revoke")
 def revoke_access_endpoint(user_id: int, category_id: int, token: str = Header()):
     user_data = get_user_by_id(user_id)
     category_data = category_service.get_by_id(category_id, user_id, token)
@@ -99,7 +99,7 @@ def revoke_access_endpoint(user_id: int, category_id: int, token: str = Header()
         return Response(status_code=404, content="No access found to revoke.")
 
 
-@users_router.get("/privileged_users/{category_id}")
+@users_router.get("/{category_id}/privileged_users")
 def view_privileged_users(category_id: int, token: str = Header()):
 
     try:

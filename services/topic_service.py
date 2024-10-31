@@ -22,7 +22,10 @@ def get_all(user_id: int, search: str = None):
     return [Topic.from_query_result(id, name, created_at, categories_id, author_id, locked)
             for id, name, created_at, categories_id, author_id, locked in data]
 
-
+def exists(id:int):
+    data = read_query("""select  id, name, created_at, categories_id, author_id, locked
+     from topics where id= ?""",(id,) )
+    return data
 
 def get_by_id(id: int, user_id: int):
     data = read_query(
@@ -96,7 +99,7 @@ def create(topic_name:str,cat_id:int,author_id:int,token:str,):
 
 
 def update_best_reply(topic_id: int, reply_id: int, user_id: int):
-    topic = get_by_id(topic_id)
+    topic = get_by_id(topic_id,user_id)
     if not topic:
         return None
 

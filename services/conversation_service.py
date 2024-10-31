@@ -6,7 +6,10 @@ def get_all(user_id):
     data = read_query('select id, users_id1, users_id2, created_at from conversation where users_id1 = ? or users_id2 = ?', (user_id,user_id))
     return [Conversation.from_query_result(*row) for row in data]
 
-
+def exists(id):
+    data = read_query('''select id, users_id1, users_id2, created_at from conversation
+     where id = ?''',(id,))
+    return data
 def get_by_id(id: int, user_id: int):
     data = read_query(
         '''
@@ -18,11 +21,10 @@ def get_by_id(id: int, user_id: int):
         ''', (id, user_id, user_id)
     )
 
-    # Dictionary to store the conversation and its messages with sender name
+
     conversation_with_messages = None
 
     for row in data:
-        # Initialize the conversation if not already done
         if conversation_with_messages is None:
             conversation_with_messages = {
                 "conversation_id": row[0],
@@ -32,11 +34,10 @@ def get_by_id(id: int, user_id: int):
                 "messages": []
             }
 
-        # Append messages along with the sender's name if message exists
         if row[4] is not None:
             conversation_with_messages["messages"].append({
                 "text": row[4],
-                "sender_name": row[5]  # Sender's name
+                "sender_name": row[5]
             })
 
     return conversation_with_messages

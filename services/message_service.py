@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from data.database import insert_query, read_query
 from data.models import Message 
 
@@ -33,7 +35,9 @@ def get_by_id(id: int):
     return next((Message.from_query_result(*row) for row in data), None)
 
 def create(text: str, conversation_id: int, users_id: int):
-    return insert_query(
-        '''INSERT INTO messages (text, conversation_id, users_id)
-            VALUES (?, ?, ?)''',
-        (text, conversation_id, users_id))
+    sent_datetime = datetime.now()
+    generated_id =  insert_query(
+        '''INSERT INTO messages (text, conversation_id, users_id,sent_at)
+            VALUES (?, ?, ?, ?)''',
+        (text, conversation_id, users_id,sent_datetime))
+    return generated_id, sent_datetime

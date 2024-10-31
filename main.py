@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI
 from routers.category import category_router
 from routers.reply import reply_router
@@ -33,6 +34,8 @@ app.include_router(conversation_router)
 #       - Reply service
 #       - User service
 
+if __name__ == "__main__":
+    uvicorn.run('main:app')
 
 
-
+# todo remove all verbs

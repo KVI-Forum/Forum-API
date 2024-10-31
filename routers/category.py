@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, Response, Header, HTTPException
 
-from common.auth import verify_admin
+from common.auth import verify_admin, verify_authenticated_user
 from data.models import Category
 from services import category_service
 from services.user_service import is_admin
@@ -14,7 +14,7 @@ category_router = APIRouter(prefix='/categories')
 @category_router.get('')
 def get_categories(sort: str | None = None, sort_by: str | None = None, token: str = Header()):
     user_id = int(token.split(";")[0])
-
+    verify_authenticated_user(token)
     result = category_service.get_all(user_id=user_id,token=token)
     if result is None:
         return Response(status_code=404, content="No categories found.")
@@ -30,11 +30,14 @@ def get_categories(sort: str | None = None, sort_by: str | None = None, token: s
 
 @category_router.get('/{id}')
 def get_category_by_id(id: int, token: str = Header()):
-    user_id = token.split(";")[0]
+    user_id = int(token.split(";")[0])
+    verify_authenticated_user(token)
+    if not category_service.exists(id):
+        return Response(status_code=404, content="Category not found.")
     category = category_service.get_by_id(id, user_id,token)
 
     if category is None:
-        return Response(status_code=404, content="Category not found.")
+        return Response(status_code=401, content="you can't look here")
     else:
         return category
     
@@ -50,7 +53,7 @@ def create_category(category: Category,token:str=Header()):
 
 @category_router.put('/{id}')
 def update_access(id: int, category: Category, token: str = Header()):
-    user_id = token.split(";")[0]
+    user_id = int(token.split(";")[0])
     category_data = category_service.get_by_id(id,user_id,token)
     
     if category_data is None:
@@ -65,7 +68,7 @@ def update_access(id: int, category: Category, token: str = Header()):
             return Response(status_code=200, content=f"Category with id: {category_id} status changed.")
     
     
-@category_router.patch("/lock_category/{id}")
+@category_router.patch("/{id}/locked/")
 
 def lock_category(id: int, token:str= Header()):
     try:
@@ -78,7 +81,7 @@ def lock_category(id: int, token:str= Header()):
         return Response(status_code=404, content="category not found.")
     return Response(status_code=200, content="category locked.")
 
-@category_router.patch("/unlock_category/{id}")
+@category_router.patch("/{id}/unlocked/")
 def unlock_category(id: int, token:str= Header()):
     try:
         verify_admin(token)

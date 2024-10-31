@@ -3,12 +3,14 @@ from fastapi import APIRouter, Response, Header, HTTPException
 from common.auth import get_user_or_raise_401, verify_authenticated_user, verify_admin
 from data.models import Topic
 from services import topic_service
+from services.topic_service import exists
 
 topic_router = APIRouter(prefix='/topics')
 
 @topic_router.get('')
 def get_topics(token:str ,sort: str | None = None, sort_by: str | None = None, search: str | None = None):
     user_id = int(token.split(";")[0])
+    verify_authenticated_user(token)
     result = topic_service.get_all(user_id,search)
     if result is None:
         return Response(status_code=404, content="No topics found.")
@@ -21,10 +23,14 @@ def get_topics(token:str ,sort: str | None = None, sort_by: str | None = None, s
 @topic_router.get('/{id}')
 def get_topic_by_id(token:str, id: int):
     user_id = int(token.split(";")[0])
-    topic = topic_service.get_by_id(id,user_id)
-
-    if topic is None:
+    verify_authenticated_user(token)
+    topic_check = exists(id)
+    if not topic_check:
         return Response(status_code=404, content="Topic not found.")
+
+    topic = topic_service.get_by_id(id,user_id)
+    if topic is None:
+        return Response(status_code=401, content="you can't see this topic bro, sorry!")
     else:
         return topic
 
@@ -39,11 +45,11 @@ def create_topic(topic: Topic,token:str= Header()):
     else:
         return Response(status_code=404, content="Category not found or locked.")
     
-@topic_router.patch("/best_reply/{id}")
+@topic_router.patch("/{topic_id}/best_reply/{reply_id}")
 def update_best_reply(id: int, reply_id: int,token:str= Header()):
     user_id = int(token.split(";")[0])
     verify_authenticated_user(token)
-    topic = topic_service.get_by_id(id)
+    topic = topic_service.exists(id)
     if topic is None:
         return Response(status_code=404, content="Topic not found.")
     else:
@@ -52,8 +58,8 @@ def update_best_reply(id: int, reply_id: int,token:str= Header()):
             return Response(status_code=401, content="You are not the author of the topic.")
 
         return Response(status_code=200, content="Best reply updated.")
-@topic_router.patch("/lock_topic/{id}")
 
+@topic_router.patch("/{id}/locked")
 def lock_topic(id: int, token:str= Header()):
     try:
         verify_admin(token)
@@ -65,7 +71,7 @@ def lock_topic(id: int, token:str= Header()):
         return Response(status_code=404, content="Topic not found.")
     return Response(status_code=200, content="Topic locked.")
 
-@topic_router.patch("/unlock_topic/{id}")
+@topic_router.patch("/{id}/unlocked")
 def unlock_topic(id: int, token:str= Header()):
     try:
         verify_admin(token)

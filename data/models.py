@@ -87,7 +87,7 @@ class Reply(BaseModel):
     id: Optional[int] = None
     content: constr(min_length=1, max_length=500) = Field(..., description='Content of the reply')
     topics_id: int = Field(..., description='ID of topic associated with the reply')
-    users_id:int = Field(..., description='ID of the user which created the reply')
+    users_id: Optional[int] = None
     created_at: Optional[datetime] = None
     @classmethod
     def from_query_result(cls,id,content,topics_id,users_id,created_at):
@@ -124,7 +124,7 @@ class Message(BaseModel):
     id: Optional[int] = None
     text: constr(min_length=2, max_length=500) = Field(..., description='Text of the message')
     conversation_id: int = Field(..., description= 'ID associated with the conversation of the message')
-    users_id: int = Field(..., description= 'ID associated with the user creating the message')
+    users_id: Optional[int] = None
     sent_at: Optional[datetime] = None
 
     @classmethod

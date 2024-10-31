@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from fastapi import Response
 from data.models import Reply
 from data.database import insert_query, read_query
@@ -33,7 +35,7 @@ def create(content:str,topics_id:int,users_id:int):
 
     if not topic:
         return None
-
-    generated_id = insert_query("""insert into reply(content,topics_id,users_id)
-    VALUES(?,?,?)""",(content,topics_id,users_id))
-    return generated_id
+    create_datetime = datetime.now()
+    generated_id = insert_query("""insert into reply(content,topics_id,users_id,created_at)
+    VALUES(?,?,?,?)""",(content,topics_id,users_id,create_datetime))
+    return generated_id,create_datetime

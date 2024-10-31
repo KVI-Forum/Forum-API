@@ -4,7 +4,7 @@ from common.auth import get_user_or_raise_401, verify_authenticated_user
 from data.models import Reply
 from services import reply_service, vote_service
 
-reply_router = APIRouter(prefix='/reply')
+reply_router = APIRouter(prefix='/replies')
 
 @reply_router.get('')
 def get_replies(sort: str | None = None, sort_by: str | None = None, search: str | None = None):
@@ -21,11 +21,12 @@ def get_replies(sort: str | None = None, sort_by: str | None = None, search: str
 def create_reply(reply: Reply,token:str= Header()):
     user_id = int(token.split(";")[0])
     verify_authenticated_user(token)
-    reply_id = reply_service.create(reply.content,reply.topics_id, user_id)
+    reply_id,create_datetime = reply_service.create(reply.content,reply.topics_id, user_id)
     if reply_id:
-        return Response(status_code=200,content=f"reply with id: {reply_id} and content:' {reply.content}' was created at {reply.created_at}.")
+        formatted_created_at = create_datetime.strftime('%Y-%m-%d %H:%M:%S')
+        return Response(status_code=200,content=f"reply with id: {reply_id} and content:' {reply.content}' was created at {formatted_created_at}.")
     else:
-        return Response(status_code=404, content="Topic or user not found.")
+        return Response(status_code=404, content="Access is restricted.")
 
 
 @reply_router.get('/all_votes')

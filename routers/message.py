@@ -27,10 +27,12 @@ def get_message_by_id(id: int):
 @message_router.post('')
 def create_message(message: Message,token:str = Header()):
     verify_authenticated_user(token)
-    message_id = message_service.create(message.text, message.conversation_id, message.users_id)
+    user_id = int(token.split(";")[0])
+    message_id, date_time_stamp = message_service.create(message.text, message.conversation_id, user_id)
 
     if message_id:
-        return Response(status_code=200, content=f"Message with id: {message_id} and text: '{message.text}' was created at {message.sent_at}.")
+        formatted_created_at = date_time_stamp.strftime('%Y-%m-%d %H:%M:%S')
+        return Response(status_code=200, content=f"Message with id: {message_id} and text: '{message.text}' was sent at {formatted_created_at} ")
     else:
         return Response(status_code=404, content="Conversation or user not found.")
 
