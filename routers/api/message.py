@@ -3,7 +3,7 @@ from data.models import Message
 from services import message_service 
 from common.auth import verify_authenticated_user
 
-message_router = APIRouter(prefix='/messages')
+message_router = APIRouter(prefix='/api/messages')
 
 @message_router.get('')
 def get_messages(sort: str | None = None, sort_by: str | None = None, search: str | None = None):

@@ -5,7 +5,7 @@ from data.models import Topic
 from services import topic_service
 from services.topic_service import exists
 
-topic_router = APIRouter(prefix='/topics')
+topic_router = APIRouter(prefix='/api/topics')
 
 @topic_router.get('')
 def get_topics(token:str ,sort: str | None = None, sort_by: str | None = None, search: str | None = None):

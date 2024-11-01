@@ -8,7 +8,7 @@ from services import category_service
 from services.user_service import is_admin
 
 #TODO connect toppics to categories // SHOULD task (admin creates category)
-category_router = APIRouter(prefix='/categories')
+category_router = APIRouter(prefix='/api/categories')
 
 
 @category_router.get('')

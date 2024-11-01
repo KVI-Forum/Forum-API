@@ -4,13 +4,13 @@ from fastapi import APIRouter, Response, Header
 
 from common.auth import verify_admin
 from data.models import LoginData
-from routers.category import get_category_by_id
+from routers.api.category import get_category_by_id
 from services import user_service, category_service
 from data.models import User , UserRegistration
 from services.user_service import get_user_by_id, give_read_access, give_write_access, revoke_access, \
     get_privileged_users_by_category
 
-users_router = APIRouter(prefix='/users')
+users_router = APIRouter(prefix='/api/users')
 
 
 @users_router.post('/login')
