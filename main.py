@@ -9,6 +9,7 @@ from routers.api.message import message_router as api_message_router
 from routers.api.conversation import conversation_router as api_conversation_router
 from routers.web.home import index_router
 from routers.web.users import users_router
+from routers.web.about import about_router
 
 app = FastAPI()
 
@@ -22,6 +23,7 @@ app.include_router(api_message_router)
 app.include_router(api_conversation_router)
 app.include_router(index_router)
 app.include_router(users_router)
+app.include_router(about_router)
 
 
 
