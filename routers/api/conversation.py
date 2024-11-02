@@ -4,7 +4,7 @@ from services import conversation_service
 from common.auth import verify_authenticated_user
 from services.topic_service import exists
 
-conversation_router = APIRouter(prefix='/conversations')
+conversation_router = APIRouter(prefix='/api/conversations')
 
 @conversation_router.get('')
 def get_conversations(token: str = Header()):

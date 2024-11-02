@@ -4,7 +4,7 @@ from common.auth import get_user_or_raise_401, verify_authenticated_user
 from data.models import Reply
 from services import reply_service, vote_service
 
-reply_router = APIRouter(prefix='/replies')
+reply_router = APIRouter(prefix='/api/replies')
 
 @reply_router.get('')
 def get_replies(sort: str | None = None, sort_by: str | None = None, search: str | None = None):
