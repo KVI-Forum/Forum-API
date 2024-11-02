@@ -1,0 +1,107 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body, html {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+header, .banner {
+    width: 100%;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em;
+    background-color: #444;
+}
+
+.navbar nav a {
+    color: #fff;
+    margin: 0 15px;
+    text-decoration: none;
+}
+
+.banner {
+    position: relative;
+    height: 200px;
+    background-image: url('../static/images/background.jpg'); /* Update with the actual path to your image */
+    background-size: cover;
+    background-position: center;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.banner-content {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5); /* Adds a dark overlay for readability */
+    padding: 35px;
+}
+
+.banner h1 {
+    font-size: 2em;
+}
+
+main {
+    flex: 1;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.forum-list {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.forum-header, .forum-item {
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr 2fr;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.forum-header {
+    background-color: #28a745;
+    color: #fff;
+    font-weight: bold;
+}
+
+.forum-item:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.forum-item h2 {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+
+.forum-item p {
+    color: #666;
+}
+
+footer {
+    text-align: center;
+    padding: 1em;
+    background-color: #333;
+    color: #fff;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+}
+
+.logo {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #fff;
+}
