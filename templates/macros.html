@@ -8,23 +8,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    {% macro load_header() %}
+    {% macro load_header(user = None) %}
     <header>
         <div class="navbar">
             <a class="logo" href="/">Your Logo</a>
             <nav>
                 <a href="/">Home</a>
-                <a href="#">Categories</a>
-                <a href="#">About</a>
-                <a href="/users/login">Login</a>
-                <a href="/users/register">Register</a>
+                <a href="/categories">Categories</a>
+                <a href="/about">About</a>
+                {% if not user %}
+                    <a href="/users/login">Login</a>
+                    <a href="/users/register">Register</a>
+                {% else %}
+                    <a href="/" class="nav-item">Hello, {{ user.username }}</a>
+                    <!-- TODO ADD A LOGOUT BUTTON -->
+                {% endif %}
             </nav>
-        </div>
-        <div class="banner">
-            <div class="banner-content">
-                <h1>Login</h1>
-                <p>Access your account to participate in discussions</p>
-            </div>
         </div>
     </header>
 

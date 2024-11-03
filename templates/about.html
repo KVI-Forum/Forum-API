@@ -3,29 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% from 'macros.html' import load_header %}
     <title>About</title>
     <link rel="stylesheet" href="../static/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <div class="navbar">
-            <div class="logo">Your Logo</div>
-            <nav>
-                <a href="#">Home</a>
-                <a href="#">Categories</a>
-                <a href="#">About</a>
-                <a href="#">Login</a>
-                <a href="#">Register</a>
-            </nav>
-        </div>
+    {{ load_header(get_user(request)) }}
         <div class="banner">
             <div class="banner-content">
                 <h1>About Us</h1>
                 <p>Learn more about our community and what we aim to achieve</p>
             </div>
         </div>
-    </header>
+    
 
     <main>
         <section class="about-section">

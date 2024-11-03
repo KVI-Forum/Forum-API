@@ -14,3 +14,32 @@ def serve_register(request:Request):
 @users_router.get('/login')
 def serve_login(request:Request):
     return templates.TemplateResponse(request=request, name='login.html')
+
+@users_router.post('register')
+def register(request:Request, username: str = Form(...), password: str = Form(...)):
+    user = user_service.create_user(username, password)
+    if user:
+        token = user_service.create_token(user)
+        response = RedirectResponse('/', status_code=302)
+        response.set_cookie('token', token)
+        return response
+    else:
+        return templates.TemplateResponse(request=request, name='register.html', context={'error': 'Username taken!'})
+    
+@users_router.post('/login')
+def login(request:Request, username: str = Form(...), password: str = Form(...)):
+    user = user_service.try_login(username, password)
+    if user:
+        token = user_service.create_token(user)
+        response = RedirectResponse('/', status_code=302)
+        response.set_cookie('token', token)
+        return response
+    else:
+        return templates.TemplateResponse(request=request, name='login.html', context={'error': 'Invalid credentials!'})
+
+
+@users_router.post('/logout')
+def logout():
+    response = RedirectResponse(url='/', status_code=302)
+    response.delete_cookie('token')
+    return response

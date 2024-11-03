@@ -3,31 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% from 'macros.html' import load_header %}
     <title>Forum Template</title>
     <link rel="stylesheet" href="../static/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 
 </head>
 <body>
-    <header>
-        <div class="navbar">
-            <a class="logo" href="/">Your Logo</a>
-            <nav>
-                <a href="/">Home</a>
-                <a href="#">Categories</a>
-                <a href="#">About</a>
-                <a href="/users/login">Login</a>
-                <a href="/users/register">Register</a>
-            </nav>
+
+    {{ load_header(get_user(request)) }}
+    <div class="banner">
+        <div class="banner-content">
+            <h1>Forum</h1>
+            <p>Where Ideas Take Shape and Discussions Thrive
+            </p>
         </div>
-        <div class="banner">
-            <div class="banner-content">
-                <h1>Forum</h1>
-                <p>Where Ideas Take Shape and Discussions Thrive
-                </p>
-            </div>
-        </div>
-    </header>
+    </div>
 
     <main>
         <section class="forum-list">

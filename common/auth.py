@@ -1,5 +1,5 @@
 from data.models import User
-from fastapi import HTTPException
+from fastapi import HTTPException, Request
 from services.user_service import is_authenticated, from_token, is_admin
 
 
@@ -16,4 +16,9 @@ def verify_authenticated_user(token: str):
 def verify_admin(token:str):
     if not is_admin(token):
         raise HTTPException(status_code=401)
+    
+def get_user_if_token(request: Request):
+    token = request.cookies.get('token')
+    return from_token(token)
+
 

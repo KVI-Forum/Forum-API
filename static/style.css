@@ -265,3 +265,18 @@ footer {
     position:relative;
     bottom: 0;
 }
+
+.nav-item button {
+    background: none;
+    border: none;           /* Remove border */
+    color: #fff;            /* Set text color to white */
+    font: inherit;          /* Inherit font styling */
+    cursor: pointer;        /* Change cursor to pointer */
+    padding: 0;             /* Remove padding */
+    margin-left: 20px;      /* Space it like the other nav items */
+    text-decoration: none;  /* Remove underline */
+}
+
+.nav-item button:hover {
+    color: #ccc;            /* Change color on hover for effect */
+}
