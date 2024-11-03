@@ -73,9 +73,11 @@ def find_by_username(username: str):
 
 
 def from_token(token: str) -> User | None:
-    _, username = token.split(_SEPARATOR)
+    if token:
+        _, username = token.split(_SEPARATOR)
 
-    return find_by_username(username)
+        return find_by_username(username)
+    return None
 
 def give_read_access(user_id: int, category_id: int):
 

@@ -35,7 +35,7 @@ def login(request:Request, username: str = Form(...), password: str = Form(...))
         response.set_cookie('token', token)
         return response
     else:
-        return templates.TemplateResponse(request=request, name='login.html', context={'error': 'Invalid credentials!'})
+        return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid username or password"})
 
 
 @users_router.post('/logout')

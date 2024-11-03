@@ -30,6 +30,9 @@
     <main>
         <section class="register-form">
             <h2>Login</h2>
+            {% if error %}
+                <p id="error_message_login">{{ error }}</p>
+            {% endif %}
             <form action="#" method="post">
                 <div class="form-group">
                     <label for="username">Username</label>

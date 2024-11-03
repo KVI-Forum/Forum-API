@@ -21,7 +21,9 @@
                     <a href="/users/register">Register</a>
                 {% else %}
                     <a href="/" class="nav-item">Hello, {{ user.username }}</a>
-                    <!-- TODO ADD A LOGOUT BUTTON -->
+                    <form action="/users/logout" method="post" style="display: inline;">
+                        <button class="cta-button" type="submit">Logout</button>
+                    </form>
                 {% endif %}
             </nav>
         </div>
