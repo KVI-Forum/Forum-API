@@ -11,7 +11,8 @@ def categories(request: Request):
     if not token:
         categories = category_service.get_all_public()
     else:
-        token=request.cookies.get('token')
         user_id = int(token.split(';')[0])
         categories = category_service.get_all(user_id,token)
-    return templates.TemplateResponse(request=request, name='categories.html',context = categories)
+
+   
+    return templates.TemplateResponse("categories.html", {"request": request, "categories": categories})

@@ -31,7 +31,28 @@
 
     {% endmacro %}
 
-    {% macro load_categories(user = None) %}
+    {% macro load_categories(categories) %}
+    <section class="forum-list">
+        <div class="forum-header">
+            <span>Categories</span>
+        </div>
+        
+        {% for category in categories %}
+        <div class="forum-item">
+            <div class="forum-info">
+                <!-- Link to single-category.html with the category ID as a parameter -->
+                <h2>
+                    <a href="/categories/{{ category.id }}">{{ category.name }}</a>
+                </h2>
+                <p>{{ category.description }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </section>
+    {% endmacro %}
+
+
+
     <header>
         <div class="">
 </body>

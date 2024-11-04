@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% from 'macros.html' import load_header %}
+    {% from 'macros.html' import load_header,load_categories %}
     <title>Forum Template</title>
     <link rel="stylesheet" href="../static/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
@@ -21,32 +21,7 @@
     </div>
 
     <main>
-        <section class="forum-list">
-            <div class="forum-header">
-                <span>Forum</span>
-                <span>Topics</span>
-                <span>Posts</span>
-                <span>Last Post</span>
-            </div>
-            <div class="forum-item">
-                <div class="forum-info">
-                    <h2>Best And Worst</h2>
-                    <p>About best and worst in the online theme</p>
-                </div>
-                <span>2</span>
-                <span>3</span>
-                <span>6 months, 2 weeks ago<br>Trader Marcus</span>
-            </div>
-            <div class="forum-item">
-                <div class="forum-info">
-                    <h2>Casinos General</h2>
-                    <p>Write about everything interesting</p>
-                </div>
-                <span>0</span>
-                <span>0</span>
-                <span>No Topics</span>
-            </div>
-        </section>
+        {{ load_categories(categories) }}
     </main>
 
     <footer>

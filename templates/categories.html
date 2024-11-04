@@ -8,3 +8,25 @@
     <link rel="stylesheet" href="../static/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 </head>
+
+
+<body>
+    
+    {{ load_header(get_user(request)) }}
+    <div class="banner">
+        <div class="banner-content">
+            <h1>Categories</h1>
+            <p>Browse through the categories to find the discussions you're interested in.
+            </p>
+        </div>
+    </div>
+
+    <main>
+        {{ load_categories(categories) }}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Your Forum</p>
+    </footer>
+</body>
+</html>

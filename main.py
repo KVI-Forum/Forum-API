@@ -11,6 +11,7 @@ from routers.web.home import index_router
 from routers.web.users import users_router
 from routers.web.about import about_router
 from routers.web.users import users_router
+from routers.web.categories import categories_router
 
 app = FastAPI()
 
@@ -25,24 +26,11 @@ app.include_router(api_conversation_router)
 app.include_router(index_router)
 app.include_router(users_router)
 app.include_router(about_router)
-app.include_router(users_router)
+app.include_router(categories_router)
 
 
-
-
-
-
-# TODO Topics in a private category are only available to category members
-
-# TODO: Add an option to lock topics in the system.
-
-# TODO: Refactor the following components to implement access-related changes:
-#       - Topic reply
-#       - Category services
-#       - Routers
-#       - Topic service
-#       - Reply service
-#       - User service
+# TODO NO CATEGORIES TO SHOW OR NO TOPICS TO SHOW MESSAGE IN THE TEMPLATES
+# TODO MAKE HOME PAGE UNIQUE 
 
 if __name__ == "__main__":
     uvicorn.run('main:app')
