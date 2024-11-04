@@ -27,7 +27,7 @@ def register(request:Request, first_name: str = Form(...), last_name: str = Form
         response.set_cookie('token', token)
         return response
     else:
-        return templates.TemplateResponse(request=request, name='register.html', context={'error': 'Username taken!'})
+        return templates.TemplateResponse("register.html", {"request": request, "error": "Username or email already exists"})
     
 @users_router.post('/login')
 def login(request:Request, username: str = Form(...), password: str = Form(...)):
