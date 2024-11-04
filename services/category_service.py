@@ -3,9 +3,11 @@ from data.database import insert_query, read_query, update_query
 from data.models import Category
 from services.user_service import is_admin
 
+def get_all_public():
+    data = read_query("select id, name, description, private,locked from categories where private = 0")
+    return [Category.from_query_result(id, name, description, private,locked) for id, name, description, private,locked in data]
 
 def get_all(user_id: int, token: str):
-
     if is_admin(token):
         data = read_query('SELECT id, name, description, private, locked FROM categories')
         return [Category.from_query_result(id, name, description, private,locked) for id, name, description, private,locked in data]

@@ -7,5 +7,11 @@ templates = CustomJinja2Templates(directory='templates')
 
 @categories_router.get('/')
 def categories(request: Request):
-    categories = category_service.get_all()
+    token = request.cookies.get('token')
+    if not token:
+        categories = category_service.get_all_public()
+    else:
+        token=request.cookies.get('token')
+        user_id = int(token.split(';')[0])
+        categories = category_service.get_all(user_id,token)
     return templates.TemplateResponse(request=request, name='categories.html',context = categories)
