@@ -28,7 +28,7 @@ app.include_router(users_router)
 app.include_router(about_router)
 app.include_router(categories_router)
 app.include_router(access_router)
-
+app.include_router(access_router, prefix="/api")
 # TODO NO CATEGORIES TO SHOW OR NO TOPICS TO SHOW MESSAGE IN THE TEMPLATES
 # TODO MAKE HOME PAGE UNIQUE 
 

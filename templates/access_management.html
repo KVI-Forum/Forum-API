@@ -15,49 +15,53 @@
     <div class="banner">
         <div class="banner-content">
             <h1>Manage User Access</h1>
-            <p>Control the access levels for users.</p>
         </div>
     </div>
 
     <section>
         <div class="user-access-list">
             {% for user in users %}
-            <div class="user-access-item">
-                <p>{{ user.username }}</p>
+                <div class="user-access-item">
+                    <h2>{{ user.username }}</h2>
 
+                    <div class="access-forms">
+                        <h3></h3>
+                      <!--                      there is a problem here-->
+                        <form action="/api/users/{{ user_id }}/category/{{ category_id }}/read" method="post">
+                            <label for="read-category-{{ user.id }}"></label>
+                            <select id="read-category-{{ user.id }}" name="category_id" required>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit">Grant Read Access</button>
+                        </form>
 
-                <form action="/api/users/{{ user.id }}/read" method="post">
-                    <label for="read-category-{{ user.id }}">Select Category:</label>
-                    <select id="read-category-{{ user.id }}" name="category_id" required>
-                        {% for category in categories %}
-                        <option value="{{ category.id }}">{{ category.name }}</option>
-                        {% endfor %}
-                    </select>
-                    <button type="submit">Grant Read Access</button>
-                </form>
+                        <h3></h3>
+                      <!--                      there is a problem here-->
+                        <form action="/api/users/{{ user.id }}/category/write" method="post">
+                            <label for="write-category-{{ user.id }}"></label>
+                            <select id="write-category-{{ user.id }}" name="category_id" required>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit">Grant Write Access</button>
+                        </form>
 
-
-                <form action="/api/users/{{ user.id }}/write" method="post">
-                    <label for="write-category-{{ user.id }}">Select Category:</label>
-                    <select id="write-category-{{ user.id }}" name="category_id" required>
-                        {% for category in categories %}
-                        <option value="{{ category.id }}">{{ category.name }}</option>
-                        {% endfor %}
-                    </select>
-                    <button type="submit">Grant Write Access</button>
-                </form>
-
-
-                <form action="/api/users/{{ user.id }}/revoke" method="post">
-                    <label for="revoke-category-{{ user.id }}">Select Category:</label>
-                    <select id="revoke-category-{{ user.id }}" name="category_id" required>
-                        {% for category in categories %}
-                        <option value="{{ category.id }}">{{ category.name }}</option>
-                        {% endfor %}
-                    </select>
-                    <button type="submit">Revoke Access</button>
-                </form>
-            </div>
+                        <h3></h3>
+                      <!--                      there is a problem here-->
+                        <form action="/api/users/{{ user.id }}/category/revoke" method="post">
+                            <label for="revoke-category-{{ user.id }}"></label>
+                            <select id="revoke-category-{{ user.id }}" name="category_id" required>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit">Revoke Access</button>
+                        </form>
+                    </div>
+                </div>
             {% endfor %}
         </div>
     </section>
