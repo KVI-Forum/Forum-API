@@ -8,7 +8,7 @@ from routers.api.user import users_router as api_users_router
 from routers.api.message import message_router as api_message_router
 from routers.api.conversation import conversation_router as api_conversation_router
 from routers.web.home import index_router
-from routers.web.users import users_router
+from routers.web.users import users_router, access_router
 from routers.web.about import about_router
 from routers.web.users import users_router
 from routers.web.categories import categories_router
@@ -27,7 +27,7 @@ app.include_router(index_router)
 app.include_router(users_router)
 app.include_router(about_router)
 app.include_router(categories_router)
-
+app.include_router(access_router)
 
 # TODO NO CATEGORIES TO SHOW OR NO TOPICS TO SHOW MESSAGE IN THE TEMPLATES
 # TODO MAKE HOME PAGE UNIQUE 
