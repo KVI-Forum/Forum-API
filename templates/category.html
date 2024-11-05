@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% from 'macros.html' import load_header %}
+    <title>{{ category.name }}</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    {{ load_header(get_user(request)) }}
+
+    <div class="banner">
+        <div class="banner-content">
+            <h1>{{ category.name }}</h1>
+            <p>{{ category.description }}</p>
+        </div>
+    </div>
+
+    <main>
+        <section class="category-topics">
+            <h2>Topics in {{ category.name }}</h2>
+            
+            {% if topics %}
+                <ul>
+                    {% for topic in topics %}
+                        <li>
+                            <a href="/topics/{{ topic.id }}">{{ topic.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No topics available in this category.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Your Forum</p>
+    </footer>
+
+</body>
+</html>

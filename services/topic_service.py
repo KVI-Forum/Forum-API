@@ -138,6 +138,15 @@ def unlock(id:int):
     )
     else:
         return False
+    
+def get_by_category_id(cat_id:int):
+    data = read_query('''
+        SELECT id, name, created_at, categories_id,author_id, locked
+        FROM topics
+        WHERE categories_id = ?
+        ''', (cat_id,))
+    return [Topic.from_query_result(id, name, created_at, categories_id, author_id, locked)
+            for id, name, created_at, categories_id, author_id, locked in data]
 
 
 

@@ -390,3 +390,92 @@ footer {
   .category-card .btn:hover {
     background-color: #23643a;
   }
+
+  /* Styles for Topics Section */
+.category-topics {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.category-topics h2 {
+    font-size: 1.8em;
+    color: #333;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.category-topics ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category-topics li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.category-topics li a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.category-topics li a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+.category-topics p {
+    text-align: center;
+    color: #666;
+    font-size: 1em;
+    margin-top: 20px;
+}
+
+.error-section {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.error-section h2 {
+    color: #d9534f; /* Red color for error */
+    font-size: 1.8em;
+    margin-bottom: 10px;
+}
+
+.error-section p {
+    font-size: 1em;
+    color: #666;
+}
+
+.error-section .cta-button {
+    padding: 10px 20px;
+    font-size: 1em;
+    font-weight: bold;
+    color: #fff;
+    background-color: #28a745;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 15px;
+}
+
+.error-section .cta-button:hover {
+    background-color: #218838;
+}

@@ -7,6 +7,33 @@ def get_all_public():
     data = read_query("select id, name, description, private,locked from categories where private = 0")
     return [Category.from_query_result(id, name, description, private,locked) for id, name, description, private,locked in data]
 
+def get_by_id_public(id: int):
+    data = read_query('''SELECT c.id, c.name, c.description, c.private, t.name
+        FROM categories c
+        LEFT JOIN topics t ON c.id = t.categories_id
+        WHERE c.id = ? AND c.private = 0''', (id,))
+    
+    if not data:
+        print(f"No data found for category id: {id}")
+        return None
+
+    category_with_topics = None
+
+    for row in data:
+        if category_with_topics is None:
+            category_with_topics = {
+                "id": row[0],
+                "name": row[1],
+                "description": row[2],
+                "topics": [],
+                "private": row[3]
+            }
+
+        if row[4] is not None:
+            category_with_topics["topics"].append(row[4])
+
+    return category_with_topics
+
 def get_all(user_id: int, token: str):
     if is_admin(token):
         data = read_query('SELECT id, name, description, private, locked FROM categories')

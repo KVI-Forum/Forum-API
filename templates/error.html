@@ -3,26 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% from 'macros.html' import load_header, load_categories %}
-    <title>Categories</title>
+    {% from 'macros.html' import load_header,load_categories %}
+    <title>Error</title>
     <link rel="stylesheet" href="../static/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 </head>
-
-
 <body>
-    
     {{ load_header(get_user(request)) }}
+    
     <div class="banner">
         <div class="banner-content">
-            <h1>Categories</h1>
-            <p>Browse through the categories to find the discussions you're interested in.
-            </p>
+            <h1>Oops..</h1>
         </div>
     </div>
 
     <main>
-        {{ load_categories(categories) }}
+        <section class="error-section">
+            <h2>{{ message }}</h2>
+            <p>The category you are looking for does not exist.</p>
+            <a href="/categories" class="cta-button">Back to Categories</a>
+        </section>
     </main>
 
     <footer>
