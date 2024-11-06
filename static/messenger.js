@@ -19,7 +19,7 @@
           messagesDiv.innerHTML = '<p>Loading messages...</p>';
   
           setTimeout(() => {
-              messagesDiv.innerHTML = `<p>Chat with contact ID ${contactId}</p>`;
+              messagesDiv.innerHTML = `<p>Chat ${contactId}</p>`;
               messagesDiv.innerHTML += '<p>Message 1</p><p>Message 2</p>';
           }, 500);
       }

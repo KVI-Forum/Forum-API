@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request
 from common.template_config import CustomJinja2Templates
-from services import category_service 
+from services import category_service, user_service
 
 index_router = APIRouter(prefix='')
 templates = CustomJinja2Templates(directory='templates')
@@ -14,4 +14,6 @@ def index(request: Request):
         user_id = int(token.split(';')[0])
         categories = category_service.get_all(user_id, token)
     
-    return templates.TemplateResponse("index.html", {"request": request, "categories": categories})
+    contacts = user_service.all_users()
+    
+    return templates.TemplateResponse("index.html", {"request": request, "categories": categories, "contacts": contacts})
