@@ -10,7 +10,6 @@ A web-based forum system that allows users to interact through categories, topic
 - [Usage](#usage)
 - [Database Structure](#database-structure)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 
@@ -41,3 +40,38 @@ A web-based forum system that allows users to interact through categories, topic
    ```bash
    git clone https://github.com/KVI-Forum/Forum-System.git
    cd Forum-System/backend
+2. Install Python dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+3. Set up the database:
+   - Use MySQL Workbench or your preferred tool to import the provided SQL schema.
+   - Configure database credentials in the backend configuration file.
+
+4. Run the backend server:
+
+   ```bash
+   uvicorn main:app --reload
+## Usage
+
+- Register and log in as a user.
+- Create or view categories, topics, and replies.
+- Participate in conversations or private messages with other users.
+- As a moderator, manage user access and lock categories or topics as needed.
+
+## Database Structure
+
+The forum system database consists of the following tables:
+
+- **users**: Stores user information and credentials.
+- **categories**: Defines different discussion areas.
+- **topics**: Represents discussion threads within categories.
+- **replies**: Stores user responses within topics.
+- **messages**: Facilitates private conversations between users.
+- **access**: Manages user permissions for categories.
+- **member**: Keeps track of members added to specific categories.
+- **votes**: Handles user votes on topics or replies.
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and make a pull request with your proposed changes.
