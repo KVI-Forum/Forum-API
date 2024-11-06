@@ -51,5 +51,36 @@
         {% endfor %}
     </section>
     {% endmacro %}
+
+    {% macro load_messenger(user) %}
+        {% if user %}
+            <!-- Messenger Icon -->
+            <div id="messenger-icon" onclick="toggleMessenger()" style="position: fixed; bottom: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 15px; border-radius: 50%; cursor: pointer;">
+                💬
+            </div>
+
+            <!-- Messenger Modal -->
+            <div id="messenger-modal" style="display: none; position: fixed; bottom: 80px; right: 20px; width: 300px; background: white; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                <div style="padding: 10px; background-color: #4CAF50; color: white; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                    <strong>Messenger</strong>
+                    <span style="float: right; cursor: pointer;" onclick="toggleMessenger()">✖</span>
+                </div>
+                <div id="contact-list" style="padding: 10px; max-height: 200px; overflow-y: auto;">
+                    <ul>
+                        {% for contact in contacts %}
+                            <li onclick="openChat('{{ contact.id }}')">
+                                {{ contact.username }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div id="chat-box" style="display: none; padding: 10px; max-height: 200px; overflow-y: auto;">
+                    <div id="messages"></div>
+                    <input type="text" id="message-input" placeholder="Type a message..." style="width: 100%; padding: 8px;" onkeypress="sendMessage(event)">
+                </div>
+            </div>
+        {% endif %}
+    {% endmacro %}
+
 </body>
 </html>

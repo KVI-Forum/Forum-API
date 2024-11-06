@@ -23,14 +23,13 @@ def get_category_by_id(request: Request, id: int):
     topics = topic_service.get_by_category_id(id)
     
     if not token:
-        categories = category_service.get_by_id_public(id)
+        category = category_service.get_by_id_public(id)
     else:
         user_id = int(token.split(';')[0])
-        categories = category_service.get_by_id(id, user_id, token)
+        category = category_service.get_by_id(id, user_id, token)
     
-    if not categories:
+    if not category:
         return templates.TemplateResponse("error.html", {"request": request, "message": "Category not found"})
     
-    category = categories
     return templates.TemplateResponse("category.html", {"request": request, "category": category, "topics": topics})
 

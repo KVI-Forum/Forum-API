@@ -62,7 +62,7 @@ def construct_response(data):
 
         if row[6] is not None:
             topic_with_replies[topic_id]["reply_content"].append(row[6])
-    return list(topic_with_replies.values())
+    return topic_with_replies[topic_id] if topic_with_replies else None
 
 def sort_topics(topics: list[Topic], *, attribute='name', reverse=False):
     if attribute == 'name':
@@ -147,7 +147,6 @@ def get_by_category_id(cat_id:int):
         ''', (cat_id,))
     return [Topic.from_query_result(id, name, created_at, categories_id, author_id, locked)
             for id, name, created_at, categories_id, author_id, locked in data]
-
 
 
 

@@ -513,3 +513,128 @@ button {
 button:hover {
     background-color: #0056b3;
 }
+
+
+/* Topic Container */
+.topic-container {
+    width: 80%;
+    max-width: 800px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    align-self: center; 
+    text-align: center;  
+}
+
+.topic-container.locked {
+    background-color: #e0e0e0;
+    color: #888;
+}
+
+.author, .created-at {
+    font-size: 14px;
+    color: #555;
+}
+
+/* Locked Message */
+.locked-message {
+    font-size: 16px;
+    color: #777;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+}
+
+/* Reply Button */
+.reply-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.reply-button:hover {
+    background-color: #45a049;
+}
+
+.unauthorized, .login-prompt p {
+    font-size: 16px;
+    color: #777;
+    margin-top: 20px;
+}
+
+/* Replies Section */
+.replies {
+    width: 100%;
+    margin-top: 30px;
+}
+
+.reply {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    text-align: left;
+    width: 100%;
+}
+
+.reply-author {
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+}
+
+.reply-content {
+    font-size: 16px;
+    color: #555;
+    margin: 10px 0;
+}
+
+/* Voting Section */
+.vote-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.vote-button {
+    padding: 5px;
+    font-size: 20px;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+.upvote {
+    color: #4CAF50;
+}
+
+.downvote {
+    color: #f44336;
+}
+
+.vote-count {
+    font-size: 16px;
+    color: #333;
+}
+
+
+.reply-textarea {
+    width: 100%;
+    max-width: 700px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+    margin-bottom: 10px;
+}

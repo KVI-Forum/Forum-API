@@ -1,5 +1,4 @@
-from fastapi import APIRouter, Response, Header
-
+from fastapi import APIRouter, Response, Header,Form
 from common.auth import get_user_or_raise_401, verify_authenticated_user
 from data.models import Reply
 from services import reply_service, vote_service
@@ -18,13 +17,14 @@ def get_replies(sort: str | None = None, sort_by: str | None = None, search: str
             return result
 
 @reply_router.post('')
-def create_reply(reply: Reply,token:str= Header()):
+def create_reply(content: str = Form(...), topics_id: int = Form(...),token: str = Form(...)):
+
     user_id = int(token.split(";")[0])
     verify_authenticated_user(token)
-    reply_id,create_datetime = reply_service.create(reply.content,reply.topics_id, user_id)
+    reply_id,create_datetime = reply_service.create(content, topics_id, user_id)
     if reply_id:
         formatted_created_at = create_datetime.strftime('%Y-%m-%d %H:%M:%S')
-        return Response(status_code=200,content=f"reply with id: {reply_id} and content:' {reply.content}' was created at {formatted_created_at}.")
+        return Response(status_code=200,content=f"reply with id: {reply_id} and content:' {content}' was created at {formatted_created_at}.")
     else:
         return Response(status_code=404, content="Access is restricted.")
 

@@ -70,7 +70,10 @@ def get_by_id(id: int, user_id: int, token: str):
         ''', (user_id, id))
         is_admin_user = False
 
-    category_with_topics = {}
+    if not data:
+        return None  
+
+    category_with_topics = None
 
     for row in data:
         cat_id = row[0]
@@ -78,24 +81,23 @@ def get_by_id(id: int, user_id: int, token: str):
         
         if not is_admin_user:
             is_member = row[5] 
-
-            
             if is_private == 1 and is_member == 0:
                 return None  
 
-        if cat_id not in category_with_topics:
-            category_with_topics[cat_id] = {
-                "category_id": row[0],
-                "category_name": row[1],
+        if category_with_topics is None:
+            category_with_topics = {
+                "id": row[0],             
+                "name": row[1],            
                 "description": row[2],
                 "topics": [],
                 "private": is_private  
             }
 
-        if row[4] is not None:  
-            category_with_topics[cat_id]["topics"].append(row[4])
+        
+        if row[4] is not None:
+            category_with_topics["topics"].append(row[4])
 
-    return list(category_with_topics.values())
+    return category_with_topics
 
 
 

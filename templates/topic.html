@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% from 'macros.html' import load_header %}
+    <title>{{ topic.topic_name }}</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+    {{ load_header(get_user(request)) }}
+    <div class="topic-container {% if topic.locked %}locked{% endif %}">
+        <header>
+            <h1>{{ topic.topic_name }}</h1>
+            <p class="author">Created by: {{ topic_author }}</p>
+            <p class="created-at">Created at: {{ topic.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+
+        </header>
+        
+        {% if topic.locked %}
+            <div class="locked-message">
+                <p>This topic is locked and cannot accept new replies.</p>
+            </div>
+        {% else %}
+            {% if get_user(request) %}
+                {% if access == 2 %}
+                <form action="/topic/{{ topic_id}}/reply" method="post">
+                    <textarea id="reply-content" name="content" rows="4" placeholder="Write your reply here..." class="reply-textarea"></textarea>
+                    <input type="hidden" name="token" value="{{ request.cookies.get('token') }}">
+                    <button type="submit" class="reply-button">Post Reply</button>
+                </form>                
+                {% else %}
+                    <p class="unauthorized">You are not authorized to write in this topic.</p>
+                {% endif %}
+            {% else %}
+                <div class="login-prompt">
+                    <p>Please <a href="/login">log in</a> or <a href="/register">register</a> to participate in the discussion.</p>
+                </div>
+            {% endif %}
+        {% endif %}
+        
+        <div class="replies">
+            {% for reply in replies %}
+                <div class="reply" id="reply-{{ reply.id }}">
+                    <p class="reply-author">{{ get_reply_author(reply.id) }}:</p>
+                    <p class="reply-content">{{ reply.content }}</p>
+                    <div class="vote-section">
+                        <button class="vote-button upvote" onclick="voteReply('{{ reply.id }}', 'upvote')">👍</button>
+                        <span class="vote-count" id="upvote-count-{{ reply.id }}">{{ upvotes }}</span>
+                        <button class="vote-button downvote" onclick="voteReply('{{ reply.id }}', 'downvote')">👎</button>
+                        <span class="vote-count" id="downvote-count-{{ reply.id }}">{{ downvotes }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        async function voteReply(replyId, voteType) {
+            const url = `/api/replies/${replyId}/${voteType}`;
+            try {
+                const response = await fetch(url, {
+                    method: 'PUT'
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                   
+                    document.getElementById(`${voteType}-count-${replyId}`).textContent = data[voteType];
+                } else {
+                    console.error('Failed to update vote');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
+    
+    
+    
+    
+</body>
+</html>

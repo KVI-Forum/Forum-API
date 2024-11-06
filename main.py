@@ -12,6 +12,7 @@ from routers.web.users import users_router, access_router
 from routers.web.about import about_router
 from routers.web.users import users_router
 from routers.web.categories import categories_router
+from routers.web.topic import topic_router
 
 app = FastAPI()
 
@@ -28,6 +29,7 @@ app.include_router(users_router)
 app.include_router(about_router)
 app.include_router(categories_router)
 app.include_router(access_router)
+app.include_router(topic_router)
 
 # TODO NO CATEGORIES TO SHOW OR NO TOPICS TO SHOW MESSAGE IN THE TEMPLATES
 # TODO MAKE HOME PAGE UNIQUE 

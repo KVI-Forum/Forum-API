@@ -138,3 +138,7 @@ def get_privileged_users_by_category(category_id: int):
     ''', (category_id,))
 
     return data
+
+def get_user_access(user_id: int):
+    data = read_query('SELECT access_type FROM category_members WHERE users_id = ?', (user_id,))
+    return int(data[0][0]) if data else 0

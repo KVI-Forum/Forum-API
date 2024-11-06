@@ -39,3 +39,20 @@ def create(content:str,topics_id:int,users_id:int):
     generated_id = insert_query("""insert into reply(content,topics_id,users_id,created_at)
     VALUES(?,?,?,?)""",(content,topics_id,users_id,create_datetime))
     return generated_id,create_datetime
+
+def get_by_topic_id(topic_id: int):
+    data = read_query('select id, content, topics_id, users_id, created_at from reply where topics_id = ?',
+                      (topic_id,))
+    return (Reply.from_query_result(id, content, topics_id, users_id, created_at) for id, content, topics_id, users_id, created_at in data)
+
+def get_upvotes(reply_id: int):
+    data = read_query('select count(*) from votes where reply_id = ? and type_vote = 1', (reply_id,))
+    return int(data[0][0])
+
+def get_downvotes(reply_id: int):
+    data = read_query('select count(*) from votes where reply_id = ? and type_vote = 0', (reply_id,))
+    return int(data[0][0])
+
+def get_reply_author_name(reply_id: int):
+    data = read_query('select username from users where id = (select users_id from reply where id = ?)', (reply_id,))
+    return data[0][0]
