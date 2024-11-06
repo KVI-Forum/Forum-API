@@ -15,56 +15,66 @@
     <div class="banner">
         <div class="banner-content">
             <h1>Manage User Access</h1>
+            <p>Grant or revoke access for users to specific categories.</p>
         </div>
     </div>
 
-    <section>
-        <div class="user-access-list">
-            {% for user in users %}
-                <div class="user-access-item">
-                    <h2>{{ user.username }}</h2>
+    <main>
+        <section class="user-access-management">
+            <div class="user-access-list">
+                {% for user in users %}
+                    <div class="user-access-item">
+                        <h2>{{ user.username }}</h2>
+                        <p></p>
 
-                    <div class="access-forms">
-                        <h3></h3>
-                      <!--                      there is a problem here-->
-                        <form action="/api/users/{{ user_id }}/category/{{ category_id }}/read" method="post">
-                            <label for="read-category-{{ user.id }}"></label>
-                            <select id="read-category-{{ user.id }}" name="category_id" required>
-                                {% for category in categories %}
-                                    <option value="{{ category.id }}">{{ category.name }}</option>
-                                {% endfor %}
-                            </select>
-                            <button type="submit">Grant Read Access</button>
-                        </form>
+                        <div class="access-forms">
 
-                        <h3></h3>
-                      <!--                      there is a problem here-->
-                        <form action="/api/users/{{ user.id }}/category/write" method="post">
-                            <label for="write-category-{{ user.id }}"></label>
-                            <select id="write-category-{{ user.id }}" name="category_id" required>
-                                {% for category in categories %}
-                                    <option value="{{ category.id }}">{{ category.name }}</option>
-                                {% endfor %}
-                            </select>
-                            <button type="submit">Grant Write Access</button>
-                        </form>
+                            <form action="/admin/users/{{ user.id }}/category/read" method="post">
+                                <label for="read-category-{{ user.id }}"></label>
+                                <select id="read-category-{{ user.id }}" name="category_id" required>
+                                    <option value="" disabled selected>Select a category</option>
+                                    {% for category in categories %}
+                                        <option value="{{ category.id }}">{{ category.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <input type="hidden" name="user_id" value="{{ user.id }}">
+                                <input type="hidden" name="token" value="{{ token }}">
+                                <button type="submit">Grant Read</button>
+                            </form>
 
-                        <h3></h3>
-                      <!--                      there is a problem here-->
-                        <form action="/api/users/{{ user.id }}/category/revoke" method="post">
-                            <label for="revoke-category-{{ user.id }}"></label>
-                            <select id="revoke-category-{{ user.id }}" name="category_id" required>
-                                {% for category in categories %}
-                                    <option value="{{ category.id }}">{{ category.name }}</option>
-                                {% endfor %}
-                            </select>
-                            <button type="submit">Revoke Access</button>
-                        </form>
+
+                            <form action="/admin/users/{{ user.id }}/category/write" method="post">
+                                <label for="write-category-{{ user.id }}"></label>
+                                <select id="write-category-{{ user.id }}" name="category_id" required>
+                                    <option value="" disabled selected>Select a category</option>
+                                    {% for category in categories %}
+                                        <option value="{{ category.id }}">{{ category.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <input type="hidden" name="user_id" value="{{ user.id }}">
+                                <input type="hidden" name="token" value="{{ token }}">
+                                <button type="submit">Grant Write</button>
+                            </form>
+
+
+                            <form action="/admin/users/{{ user.id }}/category/revoke" method="post">
+                                <label for="revoke-category-{{ user.id }}"></label>
+                                <select id="revoke-category-{{ user.id }}" name="category_id" required>
+                                    <option value="" disabled selected>Select a category</option>
+                                    {% for category in categories %}
+                                        <option value="{{ category.id }}">{{ category.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <input type="hidden" name="user_id" value="{{ user.id }}">
+                                <input type="hidden" name="token" value="{{ token }}">
+                                <button type="submit">Revoke Access</button>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
-        </div>
-    </section>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
 
     <footer>
         <p>&copy; 2024 Your Forum</p>

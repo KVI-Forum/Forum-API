@@ -55,12 +55,9 @@ def logout():
 
 @access_router.get('/manage-access')
 def access_management(request: Request, token: str = Depends(admin_required)):
-
     user_id = int(token.split(";")[0])
-
     categories = category_service.get_all(user_id, token)
     users = user_service.all_users()
-
 
     return templates.TemplateResponse("access_management.html", {
         "request": request,
@@ -69,26 +66,28 @@ def access_management(request: Request, token: str = Depends(admin_required)):
         "token": token
     })
 
-@access_router.post('/users/{user_id}/category/{category_id}/read')
-def grant_read_access(user_id: int, category_id: int, token: str = Form(...)):
+
+@access_router.post('/users/{user_id}/category/read')
+def grant_read_access(user_id: int, category_id: int = Form(...), token: str = Form(...)):
     if user_service.is_admin(token):
         if user_service.give_read_access(user_id, category_id):
             return {"message": f"Read access granted to user {user_id} for category {category_id}"}
-        raise HTTPException(status_code=400, detail="Failed to grant read access")
-    raise HTTPException(status_code=403, detail="Admin access required.")
+    raise HTTPException(status_code=400, detail="Failed to grant read access")
 
-@access_router.post('/users/{user_id}/category/{category_id}/write')
-def grant_write_access(user_id: int, category_id: int, token: str = Form(...)):
+
+@access_router.post('/users/{user_id}/category/write')
+def grant_write_access(user_id: int, category_id: int = Form(...), token: str = Form(...)):
     if user_service.is_admin(token):
         if user_service.give_write_access(user_id, category_id):
             return {"message": f"Write access granted to user {user_id} for category {category_id}"}
-        raise HTTPException(status_code=400, detail="Failed to grant write access")
-    raise HTTPException(status_code=403, detail="Admin access required.")
+    raise HTTPException(status_code=400, detail="Failed to grant write access")
 
-@access_router.post('/users/{user_id}/category/{category_id}/revoke')
-def revoke_access(user_id: int, category_id: int, token: str = Form(...)):
+
+@access_router.post('/users/{user_id}/category/revoke')
+def revoke_access(user_id: int, category_id: int = Form(...), token: str = Form(...)):
     if user_service.is_admin(token):
         if user_service.revoke_access(user_id, category_id):
             return {"message": f"Access revoked from user {user_id} for category {category_id}"}
-        raise HTTPException(status_code=400, detail="Failed to revoke access")
-    raise HTTPException(status_code=403, detail="Admin access required.")
+    raise HTTPException(status_code=400, detail="Failed to revoke access")
+
+
