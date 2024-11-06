@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="refresh" content="5; url=/admin/manage-access">
-    <title>Action Successful</title>
+    <title>Action Failed</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -21,7 +21,7 @@
 
         .banner {
             text-align: center;
-            background: #28a745; /* Green background for success */
+            background: #ff4747;
             color: white;
             padding: 30px 50px;
             border-radius: 10px;
@@ -40,12 +40,11 @@
             font-weight: 400;
         }
 
-        .countdown {
+        .banner p#countdown {
             font-size: 2rem;
             font-weight: 700;
-            color: #f5c542; /* Countdown color */
-            display: inline-block;
-            animation: countdownAnimation 5s steps(5) forwards;
+            color: #f5c542;
+            animation: countdownAnimation 1s ease-in-out infinite;
         }
 
         footer {
@@ -61,11 +60,9 @@
 
         /* Countdown Animation */
         @keyframes countdownAnimation {
-            0% { content: "5"; }
-            25% { content: "4"; }
-            50% { content: "3"; }
-            75% { content: "2"; }
-            100% { content: "1"; }
+            0% { color: #f5c542; }
+            50% { color: #ff6347; }
+            100% { color: #f5c542; }
         }
     </style>
 </head>
@@ -73,9 +70,9 @@
 
     <div class="banner">
         <div class="banner-content">
-            <h1>Success!</h1>
-            <p>The action was completed successfully.</p>
-            <p>You will be redirected to the Access Management page in <span class="countdown">5</span> seconds.</p>
+            <h1>Fail!</h1>
+            <p>The action was not completed.</p>
+            <p>You will be redirected to the Access Management page in <span id="countdown">5</span> seconds.</p>
         </div>
     </div>
 

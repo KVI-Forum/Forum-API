@@ -68,28 +68,28 @@ def access_management(request: Request, token: str = Depends(admin_required)):
 
 
 @access_router.post('/users/{user_id}/category/read')
-def grant_read_access(user_id: int, category_id: int = Form(...), token: str = Form(...)):
+def grant_read_access(request:Request,user_id: int, category_id: int = Form(...), token: str = Form(...)):
     if user_service.is_admin(token):
         # remind to explain this line why True or int
         if user_service.give_read_access(user_id, category_id)== True or int:
-            return {"message": f"Read access granted to user {user_id} for category {category_id}"}
-    raise HTTPException(status_code=400, detail="Failed to grant read access")
+            return templates.TemplateResponse("success.html", {"request": request})
+    return templates.TemplateResponse("fail.html", {"request": request})
 
 
 @access_router.post('/users/{user_id}/category/write')
-def grant_write_access(user_id: int, category_id: int = Form(...), token: str = Form(...)):
+def grant_write_access(request:Request,user_id: int, category_id: int = Form(...), token: str = Form(...)):
     if user_service.is_admin(token):
         # remind to explain this line why True or int
         if user_service.give_write_access(user_id, category_id) == True or int:
-            return {"message": f"Write access granted to user {user_id} for category {category_id}"}
-    raise HTTPException(status_code=400, detail="Failed to grant write access")
+            return templates.TemplateResponse("success.html", {"request": request})
+    return templates.TemplateResponse("fail.html", {"request": request})
 
 
 @access_router.post('/users/{user_id}/category/revoke')
-def revoke_access(user_id: int, category_id: int = Form(...), token: str = Form(...)):
+def revoke_access(request:Request,user_id: int, category_id: int = Form(...), token: str = Form(...)):
     if user_service.is_admin(token):
         if user_service.revoke_access(user_id, category_id):
-            return {"message": f"Access revoked from user {user_id} for category {category_id}"}
-    raise HTTPException(status_code=400, detail="Failed to revoke access")
+            return templates.TemplateResponse("success.html", {"request": request})
+    return templates.TemplateResponse("fail.html", {"request": request})
 
 
