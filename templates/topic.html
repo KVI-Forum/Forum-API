@@ -26,7 +26,7 @@
         {% else %}
             {% if get_user(request) %}
                 {% if access == 2 %}
-                <form action="/topic/{{topic_id}}/reply" method="post">
+                <form action="/topics/{{topic_id}}/replies" method="post">
                     <textarea id="reply-content" name="content" rows="4" placeholder="Write your reply here..." class="reply-textarea"></textarea>
                     <input type="hidden" name="token" value="{{ request.cookies.get('token') }}">
                     <button type="submit" class="reply-button">Post Reply</button>

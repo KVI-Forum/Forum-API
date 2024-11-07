@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="../static/messenger.js"></script>
-    {% from 'macros.html' import load_header,load_categories,load_messenger %}
+    {% from 'macros.html' import load_header,load_categories %}
     <title>Forum</title>
     <link rel="stylesheet" href="../static/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
@@ -21,9 +20,6 @@
         </div>
     </div>
       
-  
-    {{ load_messenger(get_user(request),contacts) }}
-
     <div class="introduction">
         <h2>Welcome to Our Forum!</h2>
         <p>
