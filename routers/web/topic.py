@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request, Form
 from common.template_config import CustomJinja2Templates
-from services import topic_service,user_service,reply_service
+from services import topic_service,user_service,reply_service,vote_service
 from fastapi.responses import RedirectResponse
 from common.auth import verify_authenticated_user
 topic_router = APIRouter(prefix='/topics')
@@ -45,3 +45,4 @@ def post_reply(
         
     else:
         return templates.TemplateResponse("fail.html", {"request": request})
+    

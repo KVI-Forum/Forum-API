@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Response, Header,Form
+from fastapi.responses import RedirectResponse
 from common.auth import get_user_or_raise_401, verify_authenticated_user
 from data.models import Reply
 from services import reply_service, vote_service
@@ -35,14 +36,22 @@ def get_votes(token: str = Header()):
     return vote_service.get_all()
 
 
-@reply_router.put('/{id}/upvote')
-def vote(id:int, token: str = Header()):
+@reply_router.post('/{id}/upvote')
+def vote(id:int, token: str = Form(...)):
     verify_authenticated_user(token)
     user_id = int(token.split(";")[0])
-    return vote_service.upvote(id,user_id)
+    vote = vote_service.upvote(id,user_id)
+    if vote :
+        return RedirectResponse(f'/topics/{id}',status_code=302)
+    else:
+        return Response(status_code=404,content="Access is restricted.")
 
-@reply_router.put('/{id}/downvote')
-def vote(id:int, token: str = Header()):
+@reply_router.post('/{id}/downvote')
+def vote(id:int, token: str = Form(...)):
     verify_authenticated_user(token)
     user_id = int(token.split(";")[0])
-    return vote_service.downvote(id,user_id)
+    vote = vote_service.downvote(id,user_id)
+    if vote :
+        return RedirectResponse(f'/topics/{id}',status_code=302)
+    else:
+        return Response(status_code=404,content="Access is restricted.")

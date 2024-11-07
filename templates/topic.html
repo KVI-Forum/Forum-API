@@ -47,38 +47,26 @@
                     <p class="reply-author">{{ get_reply_author(reply.id) }}:</p>
                     <p class="reply-content">{{ reply.content }}</p>
                     <div class="vote-section">
-                        <button class="vote-button upvote" onclick="voteReply('{{ reply.id }}', 'upvote')">👍</button>
-                        <span class="vote-count" id="upvote-count-{{ reply.id }}">{{ upvotes }}</span>
-                        <button class="vote-button downvote" onclick="voteReply('{{ reply.id }}', 'downvote')">👎</button>
-                        <span class="vote-count" id="downvote-count-{{ reply.id }}">{{ downvotes }}</span>
+                        <!-- Upvote Form -->
+                        <form action="/api/replies/{{ reply.id }}/upvote" method="post" class="vote-form">
+                            <input type="hidden" name="token" value="{{ request.cookies.get('token') }}">
+                            <input type="hidden" name="vote_type" value="upvote">
+                            <button type="submit" class="vote-button upvote">👍</button>
+                            <span class="vote-count" id="upvote-count-{{ reply.id }}">{{ upvotes }}</span>
+                        </form>
+                    
+                        <!-- Downvote Form -->
+                        <form action="/api/replies/{{ reply.id }}/downvote" method="post" class="vote-form">
+                            <input type="hidden" name="token" value="{{ request.cookies.get('token') }}">
+                            <input type="hidden" name="vote_type" value="downvote">
+                            <button type="submit" class="vote-button downvote">👎</button>
+                            <span class="vote-count" id="downvote-count-{{ reply.id }}">{{ downvotes }}</span>
+                        </form>
                     </div>
                 </div>
             {% endfor %}
         </div>
     </div>
 
-    <script>
-        async function voteReply(replyId, voteType) {
-            const url = `/api/replies/${replyId}/${voteType}`;
-            try {
-                const response = await fetch(url, {
-                    method: 'PUT'
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                   
-                    document.getElementById(`${voteType}-count-${replyId}`).textContent = data[voteType];
-                } else {
-                    console.error('Failed to update vote');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
-    </script>
-    
-    
-    
-    
 </body>
 </html>
