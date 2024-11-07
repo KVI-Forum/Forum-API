@@ -52,7 +52,7 @@
     </section>
     {% endmacro %}
 
-    {% macro load_messenger(user) %}
+    {% macro load_messenger(user,contacts) %}
         {% if user %}
             <!-- Messenger Icon -->
             <div id="messenger-icon" onclick="toggleMessenger()" style="position: fixed; bottom: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 15px; border-radius: 50%; cursor: pointer;">
@@ -68,7 +68,7 @@
                 <div id="contact-list" style="padding: 10px; max-height: 200px; overflow-y: auto;">
                     <ul>
                         {% for contact in contacts %}
-                            <li onclick="openChat('{{ contact.id }}')">
+                            <li onclick="openChat('{{ contact.username }}')">
                                 {{ contact.username }}
                             </li>
                         {% endfor %}
