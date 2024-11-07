@@ -24,7 +24,7 @@ def get_topic_by_id(request: Request, topic_id: int):
 
     topic_author = topic_author.username
 
-    return templates.TemplateResponse("topic.html", {"request": request, "topic": topic, "replies": replies, "access": access, "upvotes": upvotes, "downvotes": downvotes, "topic_author": topic_author})
+    return templates.TemplateResponse("topic.html", {"request": request, "topic": topic, "replies": replies, "access": access, "upvotes": upvotes, "downvotes": downvotes, "topic_author": topic_author, "topic_id": topic_id })
 
 
 @topic_router.post("/{topic_id}/reply")
@@ -39,10 +39,11 @@ def post_reply(
     verify_authenticated_user(token)
     
     # Call your reply service to create a reply
-    reply_id, create_datetime = reply_service.create(content, topic_id, user_id)
+    reply_id = reply_service.create(content, topic_id, user_id)
     
     if reply_id:
-        formatted_created_at = create_datetime.strftime('%Y-%m-%d %H:%M:%S')
-        return {"message": f"Reply with id: {reply_id} and content: '{content}' was created at {formatted_created_at}"}
+        # formatted_created_at = create_datetime.strftime('%Y-%m-%d %H:%M:%S')
+        return RedirectResponse(f'/topic/{topic_id}',status_code=302)
+        
     else:
-        return {"error": "Access is restricted or topic not found"}
+        return templates.TemplateResponse("fail.html", {"request": request})
