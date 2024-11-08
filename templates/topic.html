@@ -48,19 +48,19 @@
                     <p class="reply-content">{{ reply.content }}</p>
                     <div class="vote-section">
                         <!-- Upvote Form -->
-                        <form action="/api/replies/{{ reply.id }}/upvote" method="post" class="vote-form">
+                        <form action="/topics/{{topic_id}}/upvote/{{reply.id}}" method="post" class="vote-form">
                             <input type="hidden" name="token" value="{{ request.cookies.get('token') }}">
                             <input type="hidden" name="vote_type" value="upvote">
                             <button type="submit" class="vote-button upvote">👍</button>
-                            <span class="vote-count" id="upvote-count-{{ reply.id }}">{{ upvotes }}</span>
+                            <span class="vote-count" id="upvote-count-{{ reply.id }}">{{ get_upvotes(reply.id) }}</span>
                         </form>
                     
                         <!-- Downvote Form -->
-                        <form action="/api/replies/{{ reply.id }}/downvote" method="post" class="vote-form">
+                        <form action="/topics/{{topic_id}}/downvote/{{reply.id}}" method="post" class="vote-form">
                             <input type="hidden" name="token" value="{{ request.cookies.get('token') }}">
                             <input type="hidden" name="vote_type" value="downvote">
                             <button type="submit" class="vote-button downvote">👎</button>
-                            <span class="vote-count" id="downvote-count-{{ reply.id }}">{{ downvotes }}</span>
+                            <span class="vote-count" id="downvote-count-{{ reply.id }}">{{ get_downvotes(reply.id) }}</span>
                         </form>
                     </div>
                 </div>

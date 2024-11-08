@@ -36,22 +36,15 @@ def get_votes(token: str = Header()):
     return vote_service.get_all()
 
 
-@reply_router.post('/{id}/upvote')
-def vote(id:int, token: str = Form(...)):
+@reply_router.put('/{id}/upvote')
+def vote(id:int, token: str = Header()):
     verify_authenticated_user(token)
     user_id = int(token.split(";")[0])
-    vote = vote_service.upvote(id,user_id)
-    if vote :
-        return RedirectResponse(f'/topics/{id}',status_code=302)
-    else:
-        return Response(status_code=404,content="Access is restricted.")
-
-@reply_router.post('/{id}/downvote')
-def vote(id:int, token: str = Form(...)):
+    return vote_service.upvote(id,user_id)
+    
+@reply_router.put('/{id}/downvote')
+def vote(id:int, token: str = Header()):
     verify_authenticated_user(token)
     user_id = int(token.split(";")[0])
-    vote = vote_service.downvote(id,user_id)
-    if vote :
-        return RedirectResponse(f'/topics/{id}',status_code=302)
-    else:
-        return Response(status_code=404,content="Access is restricted.")
+    return vote_service.upvote(id,user_id)
+    

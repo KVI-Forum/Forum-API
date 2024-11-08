@@ -4,41 +4,41 @@ from fastapi import Response ,Header
 from common.auth import verify_authenticated_user
 
 
-def upvote(id: int, user_id: int):
+def upvote(reply_id: int, user_id: int):
     user_vote = read_query(
         '''SELECT reply_id FROM votes WHERE users_id = ? AND reply_id = ?''',
-        (user_id, id)
+        (user_id, reply_id)
     )
 
     if user_vote:
         update_query(
             '''UPDATE votes SET type_vote = 1 WHERE users_id = ? AND reply_id = ?''',
-            ( user_id, id)
+            ( user_id, reply_id)
         )
         return Response(status_code=200, content="Upvoted!")
     else:
         insert_query(
             '''INSERT INTO votes (users_id, reply_id, type_vote) VALUES (?, ?, 1)''',
-            (user_id, id)
+            (user_id, reply_id)
         )
         return Response(status_code=201, content="Upvoted!")
 
-def downvote(id: int, user_id: int):
+def downvote(reply_id: int, user_id: int):
     user_vote = read_query(
         '''SELECT reply_id FROM votes WHERE users_id = ? AND reply_id = ?''',
-        (user_id, id)
+        (user_id, reply_id)
     )
 
     if user_vote:
         update_query(
             '''UPDATE votes SET type_vote = 0 WHERE users_id = ? AND reply_id = ?''',
-            (user_id, id)
+            (user_id, reply_id)
         )
         return Response(status_code=200, content="Downvoted!")
     else:
         insert_query(
             '''INSERT INTO votes (users_id, reply_id, type_vote) VALUES (?, ?, 0)''',
-            (user_id, id)
+            (user_id, reply_id)
         )
         return Response(status_code=201, content="Upvoted!")
 

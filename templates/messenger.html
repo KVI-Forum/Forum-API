@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% from 'macros.html' import load_header %}
+    <title>Messenger</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+    {{ load_header(get_user(request)) }}
+    <div class="conversation-container">
+        <header>
+            <h1>Conversation with {{ conversation_user_name }}</h1>
+            <p class="created-at">Started at: {{ conversation.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+        </header>
+
+        {% if get_user(request) %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message {% if message.sender_id == get_user(request).id %}outgoing{% else %}incoming{% endif %}">
+                        <p class="message-content">{{ message.text }}</p>
+                        <p class="message-timestamp">{{ message.sent_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                        <p class="message-author">{{ message.sender_name }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <form action="/api/messages" method="post" class="message-form">
+                <textarea id="message-content" name="text" rows="2" placeholder="Type your message..." class="message-textarea"></textarea>
+                <input type="hidden" name="conversation_id" value="{{ conversation.conversation_id }}">
+                <input type="hidden" name="token" value="{{ request.cookies.get('token') }}">
+                <button type="submit" class="send-button">Send</button>
+            </form>
+        {% else %}
+            <div class="login-prompt">
+                <p>Please <a href="/login">log in</a> or <a href="/register">register</a> to participate in this conversation.</p>
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>
