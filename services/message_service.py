@@ -41,3 +41,11 @@ def create(text: str, conversation_id: int, users_id: int):
             VALUES (?, ?, ?, ?)''',
         (text, conversation_id, users_id,sent_datetime))
     return generated_id, sent_datetime
+
+def get_by_conversation_id(conversation_id: int):
+    data = read_query(
+        '''SELECT id, text, conversation_id , users_id , sent_at
+            FROM messages 
+            WHERE conversation_id = ?''', (conversation_id,))
+
+    return [Message.from_query_result(*row) for row in data]

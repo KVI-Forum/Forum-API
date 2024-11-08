@@ -142,3 +142,9 @@ def get_privileged_users_by_category(category_id: int):
 def get_user_access(user_id: int):
     data = read_query('SELECT access_type FROM category_members WHERE users_id = ?', (user_id,))
     return int(data[0][0]) if data else 0
+
+
+def get_users_except(user_id: int):
+    data = read_query('SELECT id, first_name, last_name, username, email, is_admin FROM users WHERE id != ?', (user_id,))
+    return (User(id=id, first_name=first_name, last_name=last_name, username=username, email=email, is_admin=is_admin)
+            for id, first_name, last_name, username, email, is_admin in data)

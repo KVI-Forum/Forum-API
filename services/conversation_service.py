@@ -41,3 +41,14 @@ def get_by_id(id: int, user_id: int):
             })
 
     return conversation_with_messages
+
+def get_by_user_ids(user_id1: int, user_id2: int):
+    data = read_query(
+        '''
+        SELECT id, users_id1, users_id2, created_at
+        FROM conversation
+        WHERE (users_id1 = ? AND users_id2 = ?) OR (users_id1 = ? AND users_id2 = ?)
+        ''', (user_id1, user_id2, user_id2, user_id1)
+    )
+
+    return Conversation.from_query_result(*data[0]) if data else None

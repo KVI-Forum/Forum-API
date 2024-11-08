@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% from 'macros.html' import load_header %}
+    <title>Conversation with {{ user.username }}</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+    {{ load_header(get_user(request)) }}
+    
+    <div class="chat-container">
+        <div class="chat-conversation-box">
+            <header class="chat-header">
+                <h1>Conversation with {{ user.username }}</h1>
+                <p class="chat-started-at">Started at: {{ conversation.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+            </header>
+
+            <!-- Messages section -->
+            <div class="chat-messages">
+                {% for message in messages %}
+                    <div class="chat-message {% if message.users_id == get_user(request).id %}chat-message-outgoing{% else %}chat-message-incoming{% endif %}">
+                        <p class="chat-message-content">{{ message.text }}</p>
+                        <p class="chat-message-timestamp">{{ message.sent_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Message form -->
+            <form action="/conversations/{{ user.id }}/messages" method="post" class="chat-message-form">
+                <textarea id="chat-message-content" name="content" rows="2" placeholder="Type your message..." class="chat-message-textarea"></textarea>
+                <input type="hidden" name="conversation_id" value="{{ conversation.conversation_id }}">
+                <input type="hidden" name="token" value="{{ request.cookies.get('token') }}">
+                <button type="submit" class="chat-send-button">Send</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

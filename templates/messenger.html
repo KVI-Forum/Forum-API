@@ -11,34 +11,38 @@
 <body>
     
     {{ load_header(get_user(request)) }}
-    <div class="conversation-container">
-        <header>
-            <h1>Conversation with {{ conversation_user_name }}</h1>
-            <p class="created-at">Started at: {{ conversation.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
-        </header>
-
-        {% if get_user(request) %}
-            <div class="messages">
-                {% for message in messages %}
-                    <div class="message {% if message.sender_id == get_user(request).id %}outgoing{% else %}incoming{% endif %}">
-                        <p class="message-content">{{ message.text }}</p>
-                        <p class="message-timestamp">{{ message.sent_at.strftime('%Y-%m-%d %H:%M') }}</p>
-                        <p class="message-author">{{ message.sender_name }}</p>
-                    </div>
-                {% endfor %}
-            </div>
-
-            <form action="/api/messages" method="post" class="message-form">
-                <textarea id="message-content" name="text" rows="2" placeholder="Type your message..." class="message-textarea"></textarea>
-                <input type="hidden" name="conversation_id" value="{{ conversation.conversation_id }}">
-                <input type="hidden" name="token" value="{{ request.cookies.get('token') }}">
-                <button type="submit" class="send-button">Send</button>
-            </form>
-        {% else %}
-            <div class="login-prompt">
-                <p>Please <a href="/login">log in</a> or <a href="/register">register</a> to participate in this conversation.</p>
-            </div>
-        {% endif %}
+    
+    <!-- Container to center content -->
+    <div class="container">
+        <div class="conversation-list-container">
+            <header>
+                <h1>Conversations</h1>
+            </header>
+            
+            {% if get_user(request) %}
+                <!-- Table of all users -->
+                <table class="user-list">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>
+                                    <a href="/conversations/{{ user.id }}">{{ user.username }}</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="login-prompt">
+                    <p>Please <a href="/login">log in</a> or <a href="/register">register</a> to view conversations.</p>
+                </div>
+            {% endif %}
+        </div>
     </div>
 
 </body>

@@ -20,7 +20,7 @@
                     {% if user.is_admin %}
                         <a href="/admin/manage-access">Manage Access</a>  <!-- ej tova e novo samo -->
                     {% endif %}
-                    <a href = "/users/messenger">Messenger</a>
+                    <a href = "/messenger">Messenger</a>
                     <a href="/" class="nav-item">Hello, {{ user.username }}</a>
                     <form action="/users/logout" method="post" style="display: inline;">
                         <button class="cta-button" type="submit">Logout</button>
