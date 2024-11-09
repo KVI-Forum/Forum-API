@@ -30,7 +30,7 @@ def exists(id:int):
 def get_by_id(id: int, user_id: int):
     data = read_query(
         '''
-        SELECT t.id, t.name, t.created_at, t.categories_id, t.author_id, t.locked, r.content
+        SELECT t.id, t.name, t.created_at, t.categories_id, t.best_reply_id, t.author_id, t.locked, r.content
         FROM topics t
         LEFT JOIN reply r ON t.id = r.topics_id
         LEFT JOIN category_members cm ON cm.categories_id = t.categories_id
@@ -55,8 +55,9 @@ def construct_response(data):
                 "topic_name": row[1],
                 "created_at": row[2],
                 "categories_id": row[3],
-                "author_id": row[4],
-                "locked": row[5],
+                "best_reply_id": row[4],
+                "author_id": row[5],
+                "locked": row[6],
                 "reply_content": []
             }
 
@@ -103,13 +104,14 @@ def update_best_reply(topic_id: int, reply_id: int, user_id: int):
     if not topic:
         return None
 
-    author_id = topic[0]['author_id']
+    author_id = topic['author_id']
     if int(author_id) != int(user_id):
         return False
 
     print(f"Updating topic {topic_id} with best reply {reply_id}")
-    update_result = update_query('UPDATE topics SET best_reply_id = ? WHERE id = ?', (reply_id, topic_id))
-    print(f"Update result: {update_result}")
+    best_reply = update_query('UPDATE topics SET best_reply_id = ? WHERE id = ?', (reply_id, topic_id))
+    return best_reply
+    
 
 def lock(id:int):
     data = read_query('''

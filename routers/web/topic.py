@@ -63,3 +63,15 @@ def vote(topic_id:int,reply_id : int, token: str = Form(...)):
         return RedirectResponse(f'/topics/{topic_id}',status_code=302)
     else:
         return Response(status_code=404,content="Access is restricted.")
+
+@topic_router.post('/{topic_id}/replies/{reply_id}/best_reply')
+def best_reply(topic_id:int,reply_id : int, token: str = Form(...)):
+    verify_authenticated_user(token)
+    user_id = int(token.split(";")[0])
+   
+    reply = topic_service.update_best_reply(topic_id,reply_id,user_id)
+    if reply:
+        return RedirectResponse(f'/topics/{topic_id}',status_code=302)
+        
+    else:
+        return Response(status_code=404,content="Access is restricted.")

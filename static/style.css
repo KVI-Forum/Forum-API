@@ -585,6 +585,7 @@ button:hover {
     border-radius: 8px;
     text-align: left;
     width: 100%;
+    position: relative;
 }
 
 .reply-author {
@@ -818,4 +819,40 @@ button:hover {
 
 .chat-send-button:hover {
     background-color: #0056b3;
+}
+
+.best-reply-form button {
+    background-color: #28a745;;
+}
+
+.best-reply-form button:hover {
+    background-color: #218838;
+}
+
+.best-reply-icon {
+    position: absolute;
+    top: 10px; /* adjust as needed */
+    right: 10px; /* adjust as needed */
+    font-size: 1.2em; /* adjust for desired size */
+    color: #ffc107; /* or any color you prefer */
+}
+
+.best-reply-icon:hover {
+   animation: pulse 1.5s infinite;
+}
+
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        
+    }
+    70% {
+        transform: scale(1.05);
+       
+    }
+    100% {
+        transform: scale(1);
+        
+    }
 }

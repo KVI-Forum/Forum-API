@@ -46,6 +46,9 @@
                 <div class="reply" id="reply-{{ reply.id }}">
                     <p class="reply-author">{{ get_reply_author(reply.id) }}:</p>
                     <p class="reply-content">{{ reply.content }}</p>
+                    {% if reply.id == topic.best_reply_id %}
+                        <span class="best-reply-icon">⭐ Best Reply</span>
+                    {% endif %}
                     <div class="vote-section">
                         <!-- Upvote Form -->
                         <form action="/topics/{{topic_id}}/upvote/{{reply.id}}" method="post" class="vote-form">
@@ -54,7 +57,7 @@
                             <button type="submit" class="vote-button upvote">👍</button>
                             <span class="vote-count" id="upvote-count-{{ reply.id }}">{{ get_upvotes(reply.id) }}</span>
                         </form>
-                    
+
                         <!-- Downvote Form -->
                         <form action="/topics/{{topic_id}}/downvote/{{reply.id}}" method="post" class="vote-form">
                             <input type="hidden" name="token" value="{{ request.cookies.get('token') }}">
@@ -62,6 +65,14 @@
                             <button type="submit" class="vote-button downvote">👎</button>
                             <span class="vote-count" id="downvote-count-{{ reply.id }}">{{ get_downvotes(reply.id) }}</span>
                         </form>
+
+                        {% if get_user(request).id == topic.author_id %}
+                        <!-- Best Reply Form -->
+                        <form action="/topics/{{topic_id}}/replies/{{reply.id}}/best_reply" method="post" class="best-reply-form">
+                            <input type="hidden" name="token" value="{{ request.cookies.get('token') }}">
+                            <button type="submit" class="best-reply-button">⭐</button>
+                        </form>
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}
