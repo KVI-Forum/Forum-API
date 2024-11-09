@@ -44,3 +44,4 @@ if __name__ == "__main__":
 
 
 # todo remove all verbs
+# todo empty conversation

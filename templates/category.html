@@ -32,12 +32,7 @@
                         </li>
                     {% endfor %}
                 </ul>
-            {% else %}
-                <p>No topics available in this category.</p>
-            {% endif %}
-        </section>
-    
-        {% if get_user(request) %}
+            {% if get_user(request) %}
             {% if not category.locked %}
             <div class="create-topic-wrapper">
                 <form action="/categories/{{ category.id }}/topics" method="post" class="create-topic">
@@ -52,7 +47,10 @@
                 <p>This category is locked and cannot accept new topics.</p>
             {% endif %}
         {% endif %}
-    </main>
+            {% else %}
+                <p>No topics available in this category.</p>
+            {% endif %}
+        </section>
     
 
     <footer>

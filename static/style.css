@@ -104,6 +104,7 @@ footer {
     position: fixed; /* Keep it fixed at the bottom */
     bottom: 0;
     left: 0;
+   
 }
 
 .logo {
@@ -447,6 +448,8 @@ footer {
     justify-content: center;
     margin-top: 20px;
     justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 40px; /* Add more space below the form */
 }
 
 /* Styling for the Create Topic form */
