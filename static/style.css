@@ -392,16 +392,15 @@ footer {
     background-color: #23643a;
   }
 
-  /* Styles for Topics Section */
+ /* Category Topics Section Styling */
 .category-topics {
     max-width: 800px;
-    margin: 0 auto;
+    margin: 20px auto;
     padding: 20px;
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .category-topics h2 {
@@ -409,13 +408,11 @@ footer {
     color: #333;
     margin-bottom: 15px;
     text-align: center;
-    font-weight: bold;
 }
 
 .category-topics ul {
     list-style: none;
     padding: 0;
-    margin: 0;
 }
 
 .category-topics li {
@@ -436,23 +433,18 @@ footer {
 }
 
 .category-topics p {
-    text-align: center;
     color: #666;
     font-size: 1em;
-    margin-top: 20px;
 }
 
-/* Wrapper for Create Topic form */
+/* Create Topic Form Styling */
 .create-topic-wrapper {
     display: flex;
     justify-content: center;
     margin-top: 20px;
-    justify-content: center;
-    margin-top: 20px;
-    margin-bottom: 40px; /* Add more space below the form */
+    margin-bottom: 40px; /* Extra spacing */
 }
 
-/* Styling for the Create Topic form */
 .create-topic {
     display: flex;
     gap: 10px;
@@ -481,6 +473,7 @@ footer {
 .create-topic button:hover {
     background-color: #0056b3;
 }
+
 
 
 .error-section {
@@ -914,4 +907,15 @@ button:hover {
     font-size: 1.5em;
     padding: 5px;
 }
-
+.category-footer{
+    position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50px;
+      background-color: #333;
+      color: white;
+      text-align: center;
+      line-height: 50px;
+      padding: 20px;/* Vertically center text in footer */
+    }

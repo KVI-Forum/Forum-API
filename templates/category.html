@@ -23,7 +23,7 @@
     <main>
         <section class="category-topics">
             <h2>Topics in {{ category.name }}</h2>
-            
+
             {% if topics %}
                 <ul>
                     {% for topic in topics %}
@@ -51,11 +51,10 @@
                 <p>No topics available in this category.</p>
             {% endif %}
         </section>
-    
 
-    <footer>
+
+    <footer class="category-footer">
         <p>&copy; 2024 Your Forum</p>
     </footer>
-
 </body>
 </html>

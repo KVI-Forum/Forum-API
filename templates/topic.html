@@ -79,5 +79,28 @@
         </div>
     </div>
 
+    <script>
+        async function voteReply(replyId, voteType) {
+            const url = `/api/replies/${replyId}/${voteType}`;
+            try {
+                const response = await fetch(url, {
+                    method: 'PUT'
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                   
+                    document.getElementById(`${voteType}-count-${replyId}`).textContent = data[voteType];
+                } else {
+                    console.error('Failed to update vote');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
+    
+    
+    
+    
 </body>
 </html>
