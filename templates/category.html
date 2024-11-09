@@ -36,7 +36,24 @@
                 <p>No topics available in this category.</p>
             {% endif %}
         </section>
+    
+        {% if get_user(request) %}
+            {% if not category.locked %}
+            <div class="create-topic-wrapper">
+                <form action="/categories/{{ category.id }}/topics" method="post" class="create-topic">
+                    <input type="text" name="topic_name" placeholder="Topic Name" required>
+                    <input type="hidden" name="category_id" value="{{ category.id }}">
+                    <input type="hidden" name="author_id" value="{{ get_user(request).id }}">
+                    <input type="hidden" name="token" value="{{ request.cookies.get('token') }}">
+                    <button type="submit">Create Topic</button>
+                </form>
+            </div>
+            {% else %}
+                <p>This category is locked and cannot accept new topics.</p>
+            {% endif %}
+        {% endif %}
     </main>
+    
 
     <footer>
         <p>&copy; 2024 Your Forum</p>

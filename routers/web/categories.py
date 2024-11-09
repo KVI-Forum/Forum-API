@@ -50,3 +50,18 @@ def unlock_category(request : Request , id: int, token: str = Form(...)):
         return templates.TemplateResponse("error.html", {"request": request, "message": "Category not found"})
     return RedirectResponse(f'/categories',status_code=302)
 
+@categories_router.post('/{category_id}/topics')
+def post_topic(
+    category_id: int,
+    request: Request,
+    name: str = Form(...),
+    author_id: int = Form(...),
+    token: str = Form(...)
+    ):
+    
+    topic_id = topic_service.create(name,category_id,author_id,token)
+    
+    if topic_id:
+        return RedirectResponse(f'/categories/{category_id}',status_code=302)
+    else:
+        return templates.TemplateResponse("fail.html", {"request": request})
