@@ -68,7 +68,7 @@
 
                         {% if get_user(request).id == topic.author_id %}
                         <!-- Best Reply Form -->
-                        <form action="/topics/{{topic_id}}/replies/{{reply.id}}/best_reply" method="post" class="best-reply-form">
+                        <form action="/topics/{{topic_id}}/replies/{{reply.id}}/best_reply" method="post" class="best-reply-form" title="Make Best Reply">
                             <input type="hidden" name="token" value="{{ request.cookies.get('token') }}">
                             <button type="submit" class="best-reply-button">⭐</button>
                         </form>

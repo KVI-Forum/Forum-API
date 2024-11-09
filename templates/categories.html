@@ -22,7 +22,7 @@
     </div>
 
     <main>
-        {{ load_categories(categories) }}
+        {{ load_categories(request, categories, get_user(request)) }}
     </main>
 
     <footer>

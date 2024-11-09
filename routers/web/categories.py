@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Form, Request
+from fastapi.responses import RedirectResponse
 from common.template_config import CustomJinja2Templates
 from services import category_service,topic_service
 
@@ -32,4 +33,20 @@ def get_category_by_id(request: Request, id: int):
         return templates.TemplateResponse("error.html", {"request": request, "message": "Category not found"})
     
     return templates.TemplateResponse("category.html", {"request": request, "category": category, "topics": topics})
+
+@categories_router.post('/{id}/lock')
+def lock_category(request : Request ,id: int, token: str = Form(...)):
+    user_id = int(token.split(";")[0])
+    locked_cat = category_service.lock(id)
+    if not locked_cat:
+        return templates.TemplateResponse("error.html", {"request": request, "message": "Category not found"})
+    return RedirectResponse(f'/categories',status_code=302)
+
+@categories_router.post('/{id}/unlock')
+def unlock_category(request : Request , id: int, token: str = Form(...)):
+    user_id = int(token.split(";")[0])
+    unlocked_cat = category_service.unlock(id)
+    if not unlocked_cat:
+        return templates.TemplateResponse("error.html", {"request": request, "message": "Category not found"})
+    return RedirectResponse(f'/categories',status_code=302)
 

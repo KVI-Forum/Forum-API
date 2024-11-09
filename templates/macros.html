@@ -34,7 +34,7 @@
     </header>
     {% endmacro %}
 
-    {% macro load_categories(categories) %}
+    {% macro load_categories(request, categories, user = None) %}
     <section class="forum-list">
         <div class="forum-header">
             <span>Categories</span>
@@ -48,10 +48,25 @@
                 </h2>
                 <p>{{ category.description }}</p>
             </div>
+            {% if user.is_admin %}
+            <div class="forum-action">
+                {% if category.locked == 1 %}
+                <form action="/categories/{{ category.id }}/unlock" method="post" title="Unlock Category">
+                    <input type="hidden" name="token" value="{{ request.cookies.get('token') }}">
+                    <button type="submit" class="unlock-button">🔓</button>
+                </form>
+                {% else %}
+                <form action="/categories/{{ category.id }}/lock" method="post" title = "Lock Category">
+                    <input type="hidden" name="token" value="{{ request.cookies.get('token') }}">
+                    <button type="submit" class="lock-button">🔒</button>
+                </form>
+                {% endif %}
+            </div>
+            {% endif %}
         </div>
         {% endfor %}
     </section>
-    {% endmacro %}
+{% endmacro %}
 
 </body>
 </html>
