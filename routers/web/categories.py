@@ -34,7 +34,7 @@ def get_category_by_id(request: Request, id: int):
     
     return templates.TemplateResponse("category.html", {"request": request, "category": category, "topics": topics})
 
-@categories_router.post('/{id}/lock')
+@categories_router.post('/{id}/locked')
 def lock_category(request : Request ,id: int, token: str = Form(...)):
     user_id = int(token.split(";")[0])
     locked_cat = category_service.lock(id)
@@ -42,7 +42,7 @@ def lock_category(request : Request ,id: int, token: str = Form(...)):
         return templates.TemplateResponse("error.html", {"request": request, "message": "Category not found"})
     return RedirectResponse(f'/categories',status_code=302)
 
-@categories_router.post('/{id}/unlock')
+@categories_router.post('/{id}/unlocked')
 def unlock_category(request : Request , id: int, token: str = Form(...)):
     user_id = int(token.split(";")[0])
     unlocked_cat = category_service.unlock(id)

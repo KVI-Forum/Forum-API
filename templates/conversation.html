@@ -16,7 +16,11 @@
         <div class="chat-conversation-box">
             <header class="chat-header">
                 <h1>Conversation with {{ user.username }}</h1>
+                {% if conversation.created_at %}
                 <p class="chat-started-at">Started at: {{ conversation.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                {% else %}
+                <p class="chat-started-at">No messages yet.</p>
+                {% endif %}
             </header>
 
             <!-- Messages section -->

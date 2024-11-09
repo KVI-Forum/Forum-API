@@ -50,5 +50,8 @@ def get_by_user_ids(user_id1: int, user_id2: int):
         WHERE (users_id1 = ? AND users_id2 = ?) OR (users_id1 = ? AND users_id2 = ?)
         ''', (user_id1, user_id2, user_id2, user_id1)
     )
-
+    if not data:
+        _ = insert_query('insert into conversation (users_id1, users_id2) values (?, ?)', (user_id1, user_id2))
+        return Conversation.from_query_result(_, user_id1, user_id2, None)
+    
     return Conversation.from_query_result(*data[0]) if data else None

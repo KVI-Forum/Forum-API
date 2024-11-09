@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request, Form, Response
 from common.template_config import CustomJinja2Templates
-from services import topic_service,user_service,reply_service,vote_service
+from services import topic_service,user_service,reply_service,vote_service,category_service
 from fastapi.responses import RedirectResponse
 from common.auth import verify_authenticated_user
 topic_router = APIRouter(prefix='/topics')
@@ -75,3 +75,21 @@ def best_reply(topic_id:int,reply_id : int, token: str = Form(...)):
         
     else:
         return Response(status_code=404,content="Access is restricted.")
+    
+@topic_router.post('/{topic_id}/locked')
+def lock_topic(request : Request ,topic_id: int, token: str = Form(...)):
+    verify_authenticated_user(token)
+    locked_topic = topic_service.lock(topic_id)
+    cat_id = category_service.get_by_topic_id(topic_id)
+    if not locked_topic:
+        return templates.TemplateResponse("error.html", {"request": request, "message": "Topic not found"})
+    return RedirectResponse(f'/categories/{cat_id}',status_code=302)
+
+@topic_router.post('/{topic_id}/unlocked')
+def unlock_topic(request : Request , topic_id: int, token: str = Form(...)):
+    verify_authenticated_user(token)
+    unlocked_topic = topic_service.unlock(topic_id)
+    cat_id = category_service.get_by_topic_id(topic_id)
+    if not unlocked_topic:
+        return templates.TemplateResponse("error.html", {"request": request, "message": "Topic not found"})
+    return RedirectResponse(f'/categories/{cat_id}',status_code=302)

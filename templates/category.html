@@ -30,13 +30,26 @@
                         <li>
                             <a href="/topics/{{ topic.id }}">{{ topic.name }}</a>
                         </li>
+                        {% if get_user(request).is_admin %}
+                            {% if not topic.locked %}
+                            <form action="/topics/{{ topic.id }}/locked" method="post" title="Lock Topic">
+                                <input type="hidden" name="token" value="{{ request.cookies.get('token') }}">
+                                <button type="submit" class="lock-button">🔒</button>
+                            </form>
+                            {% else %}
+                            <form action="/topics/{{ topic.id }}/unlocked" method="post" title="Unlock Topic">
+                                <input type="hidden" name="token" value="{{ request.cookies.get('token') }}">
+                                <button type="submit" class="unlock-button">🔓</button>
+                            </form>
+                            {% endif %}
+                        {% endif %}
                     {% endfor %}
                 </ul>
             {% if get_user(request) %}
             {% if not category.locked %}
             <div class="create-topic-wrapper">
                 <form action="/categories/{{ category.id }}/topics" method="post" class="create-topic">
-                    <input type="text" name="topic_name" placeholder="Topic Name" required>
+                    <input type="text" name="name" placeholder="Topic Name" required>
                     <input type="hidden" name="category_id" value="{{ category.id }}">
                     <input type="hidden" name="author_id" value="{{ get_user(request).id }}">
                     <input type="hidden" name="token" value="{{ request.cookies.get('token') }}">

@@ -203,3 +203,7 @@ def check_private(id:int):
         return True
     else:
         return False
+    
+def get_by_topic_id(topic_id:int):
+    data = read_query("""select categories_id from topics where id = ?""", (topic_id,))
+    return data[0][0]
