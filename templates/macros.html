@@ -61,6 +61,11 @@
                     <button type="submit" class="lock-button">🔒</button>
                 </form>
                 {% endif %}
+
+                <form action="/categories/{{ category.id }}/priviliged" method="get" title="View Priviliged Users">
+                    <input type="hidden" name="token" value="{{ request.cookies.get('token') }}">
+                    <button type="submit" class="view-priviliged-button">View Priviliged Users</button>
+                </form>
             </div>
             {% endif %}
         </div>

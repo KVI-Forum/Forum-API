@@ -129,15 +129,27 @@ def revoke_access(user_id: int, category_id: int) -> bool:
     return result
 
 
+# def get_privileged_users_by_category(category_id: int):
+#     data = read_query('''
+#         SELECT u.username, cm.access_type 
+#         FROM category_members cm 
+#         JOIN users u ON cm.users_id = u.id 
+#         WHERE cm.categories_id = ?
+#     ''', (category_id,))
+
+#     return data
+
 def get_privileged_users_by_category(category_id: int):
     data = read_query('''
-        SELECT u.username, cm.access_type 
-        FROM category_members cm 
-        JOIN users u ON cm.users_id = u.id 
+        SELECT u.username, cm.access_type
+        FROM category_members cm
+        JOIN users u ON cm.users_id = u.id
         WHERE cm.categories_id = ?
     ''', (category_id,))
-
-    return data
+    
+    # Process data if it returns as a list of tuples
+    users = [{"username": row[0], "access_type": row[1]} for row in data]
+    return users
 
 def get_user_access(user_id: int):
     data = read_query('SELECT access_type FROM category_members WHERE users_id = ?', (user_id,))

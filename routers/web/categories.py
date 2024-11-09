@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import RedirectResponse
 from common.template_config import CustomJinja2Templates
-from services import category_service,topic_service
+from services import category_service,topic_service,user_service
 
 categories_router = APIRouter(prefix='/categories')
 templates = CustomJinja2Templates(directory='templates')
@@ -65,3 +65,11 @@ def post_topic(
         return RedirectResponse(f'/categories/{category_id}',status_code=302)
     else:
         return templates.TemplateResponse("fail.html", {"request": request})
+    
+@categories_router.get('/{category_id}/priviliged')
+def get_priviliged_users(request: Request, category_id: int):
+    token = request.cookies.get('token')
+    user_id = int(token.split(';')[0])
+    category = category_service.get_by_id(category_id,user_id,token)
+    users = user_service.get_privileged_users_by_category(category_id)
+    return templates.TemplateResponse("priviliged_users.html", {"request": request, "users": users, "category": category})

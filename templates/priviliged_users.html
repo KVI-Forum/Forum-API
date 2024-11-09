@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% from 'macros.html' import load_header %}
+    <title>Privileged Users for {{ category.name }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  {{ load_header (get_user(request)) }}
+
+    <main style="display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;">
+
+        <h1 style="font-size: 2em;
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;">
+        Privileged Users for {{ category.name }}
+        </h1>
+
+        {% if users %}
+        <table class="privileged-users-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Access</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>
+                        {% if user.access_type == 1 %}
+                            Read
+                        {% elif user.access_type == 2 %}
+                            Write
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        {% else %}
+        <p>No privileged users for this category.</p>
+        {% endif %}
+    </main>
+
+</body>
+</html>
