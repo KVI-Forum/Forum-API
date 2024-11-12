@@ -1,6 +1,7 @@
 # Forum System
 
 A web-based forum system that allows users to interact through categories, topics, and replies. This project is built with FastAPI and MySQL.
+Note! This project is missing some functionality buttons . This is just a training project for our technical skills.
 
 ## Table of Contents
 
